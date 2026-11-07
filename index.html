@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0f172a">
+<meta name="theme-color" content="#0b1220">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="description" content="一个基于浏览器定位的极简海拔测量工具。">
@@ -33,8 +33,8 @@
   }
 
   body {
-    /* 默认主题：深海蓝（海拔 < 500m） */
-    --bg: #0f172a;
+    /* 默认主题：未获取到海拔时，深色背景（浅色模式见下方媒体查询） */
+    --bg: #0b1220;
     --fg: #f4f7fa;
     --muted: #93a3b8;
     --dim: #7d8da3;
@@ -118,6 +118,39 @@
     --weak-edge: rgba(185, 28, 28, 0.28);
     --error-fg: #b91c1c;
     --warn-fg: #96590a;
+  }
+
+  /* 深海蓝区间（显式声明，区别于未定位时的默认深色） */
+  body[data-zone="sea"] {
+    --bg: #0f172a;
+  }
+
+  /* ---------- 系统浅色模式（仅在未获取到海拔时生效） ---------- */
+  @media (prefers-color-scheme: light) {
+    body:not([data-zone]) {
+      --bg: #eef2f7;
+      --fg: #0b1220;
+      --muted: #47566b;
+      --dim: #5b6b80;
+      --surface: rgba(15, 23, 42, 0.05);
+      --edge: rgba(15, 23, 42, 0.13);
+      --num-top: #0b1220;
+      --num-bottom: #33415a;
+      --accent: #0f766e;
+      --pulse: rgba(15, 118, 110, 0.35);
+      --dot-idle: #94a3b8;
+      --good-fg: #0f766e;
+      --good-bg: rgba(15, 118, 110, 0.12);
+      --good-edge: rgba(15, 118, 110, 0.28);
+      --fair-fg: #96590a;
+      --fair-bg: rgba(180, 120, 20, 0.14);
+      --fair-edge: rgba(180, 120, 20, 0.3);
+      --weak-fg: #b91c1c;
+      --weak-bg: rgba(185, 28, 28, 0.1);
+      --weak-edge: rgba(185, 28, 28, 0.28);
+      --error-fg: #b91c1c;
+      --warn-fg: #96590a;
+    }
   }
 
   /* ---------- 顶栏 ---------- */
@@ -354,37 +387,116 @@
     gap: 10px;
   }
 
-  .records {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-
-  .record {
+  /* ---------- 数据面板 ---------- */
+  .panel {
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    padding: 9px 10px;
+    padding: 9px 12px 11px;
     border: 1px solid var(--edge);
-    border-radius: 14px;
+    border-radius: 18px;
     background-color: var(--surface);
-    text-align: center;
     transition: background-color 0.6s ease, border-color 0.6s ease;
   }
 
-  .record-label {
-    font-size: 10.5px;
-    letter-spacing: 0.04em;
+  .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--edge);
+    transition: border-color 0.6s ease;
+  }
+
+  .delta {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .delta-label {
+    font-size: 11px;
     color: var(--muted);
+    white-space: nowrap;
     transition: color 0.6s ease;
   }
 
-  .record-value {
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1.25;
+  .delta-value {
+    font-family: "DIN Alternate", "SF Pro Display", -apple-system, BlinkMacSystemFont,
+      "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--accent);
+    white-space: nowrap;
     font-variant-numeric: tabular-nums;
-    transition: color 0.6s ease, opacity 0.3s ease;
+    transition: color 0.5s ease;
+  }
+
+  .track-btn {
+    flex: none;
+    height: 26px;
+    padding: 0 13px;
+    border: 1px solid var(--edge);
+    border-radius: 999px;
+    background-color: transparent;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+    transition: color 0.25s ease, border-color 0.25s ease, background-color 0.25s ease,
+      opacity 0.2s ease, transform 0.16s ease;
+  }
+
+  .track-btn.is-active {
+    color: #04211c;
+    border-color: transparent;
+    background-image: linear-gradient(180deg, #9df6e8 0%, #45dcc2 100%);
+    box-shadow: 0 6px 14px -8px rgba(45, 212, 191, 0.7);
+  }
+
+  .track-btn:active {
+    transform: scale(0.96);
+  }
+
+  .track-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+    transform: none;
+  }
+
+  .panel-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px 16px;
+    margin-top: 7px;
+  }
+
+  .cell {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .cell-label {
+    font-size: 10.5px;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+    white-space: nowrap;
+    transition: color 0.6s ease;
+  }
+
+  .cell-value {
+    font-size: 12.5px;
+    font-weight: 600;
+    line-height: 1.5;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.6s ease;
   }
 
   .actions {
@@ -486,8 +598,8 @@
       min-height: 1.6em;
       font-size: 13px;
     }
-    .record {
-      padding: 7px 10px;
+    .panel {
+      padding: 7px 11px 9px;
     }
     .primary {
       padding: 15px 20px;
@@ -506,7 +618,7 @@
   }
 </style>
 </head>
-<body data-state="idle" data-zone="sea">
+<body data-state="idle">
 
   <header class="topbar">
     <div class="brand-wrap">
@@ -533,16 +645,33 @@
   </main>
 
   <div class="bottom">
-    <div class="records">
-      <div class="record">
-        <span class="record-label">本次最高</span>
-        <span class="record-value" id="recordMax">--</span>
+    <section class="panel" aria-label="数据面板">
+      <div class="panel-head">
+        <div class="delta">
+          <span class="delta-label" id="deltaLabel">尚未开始追踪</span>
+          <span class="delta-value" id="deltaValue"></span>
+        </div>
+        <button class="track-btn" id="track" type="button" disabled>开始追踪</button>
       </div>
-      <div class="record">
-        <span class="record-label">本次最低</span>
-        <span class="record-value" id="recordMin">--</span>
+      <div class="panel-grid">
+        <div class="cell">
+          <span class="cell-label">本次最高</span>
+          <span class="cell-value" id="recordMax">--</span>
+        </div>
+        <div class="cell">
+          <span class="cell-label">本次最低</span>
+          <span class="cell-value" id="recordMin">--</span>
+        </div>
+        <div class="cell">
+          <span class="cell-label">追踪最高</span>
+          <span class="cell-value" id="trackMax">--</span>
+        </div>
+        <div class="cell">
+          <span class="cell-label">追踪最低</span>
+          <span class="cell-value" id="trackMin">--</span>
+        </div>
       </div>
-    </div>
+    </section>
     <div class="actions">
       <button class="ghost" id="reset" type="button">重置记录</button>
       <button class="primary" id="refresh" type="button">刷新海拔</button>
@@ -590,6 +719,11 @@
   var geoEl = document.getElementById('geo');
   var recordMaxEl = document.getElementById('recordMax');
   var recordMinEl = document.getElementById('recordMin');
+  var trackMaxEl = document.getElementById('trackMax');
+  var trackMinEl = document.getElementById('trackMin');
+  var deltaLabelEl = document.getElementById('deltaLabel');
+  var deltaValueEl = document.getElementById('deltaValue');
+  var trackBtn = document.getElementById('track');
   var refreshBtn = document.getElementById('refresh');
   var resetBtn = document.getElementById('reset');
   var unitToggle = document.getElementById('unitToggle');
@@ -608,6 +742,14 @@
     min: null,
     lat: null,
     lon: null
+  };
+
+  // 爬升追踪：start 为起点海拔（米），停止后全部清空
+  var track = {
+    active: false,
+    start: null,
+    max: null,
+    min: null
   };
 
   // 数字滚动动画：shown 记录当前屏幕上显示的数字（当前单位）
@@ -699,13 +841,38 @@
   }
 
   function applyZone(zone) {
-    if (body.dataset.zone === zone.name) {
+    var name = zone ? zone.name : '';
+    if ((body.dataset.zone || '') === name) {
       return;
     }
-    body.dataset.zone = zone.name;
-    if (themeMeta) {
-      themeMeta.setAttribute('content', zone.color);
+    if (name) {
+      body.dataset.zone = name;
+    } else {
+      delete body.dataset.zone;
     }
+    syncThemeMeta();
+  }
+
+  function systemPrefersLight() {
+    return !!(window.matchMedia &&
+      window.matchMedia('(prefers-color-scheme: light)').matches);
+  }
+
+  function syncThemeMeta() {
+    if (!themeMeta) {
+      return;
+    }
+    var color = '';
+    for (var i = 0; i < ZONES.length; i++) {
+      if (ZONES[i].name === body.dataset.zone) {
+        color = ZONES[i].color;
+        break;
+      }
+    }
+    if (!color) {
+      color = systemPrefersLight() ? '#eef2f7' : '#0b1220';
+    }
+    themeMeta.setAttribute('content', color);
   }
 
   /* ---------- 自适应字号：保证长数字不溢出 ---------- */
@@ -852,6 +1019,62 @@
     recordMinEl.textContent = state.min === null ? '--' : formatAltitude(state.min) + ' ' + symbol;
   }
 
+  function formatDelta() {
+    if (!track.active || track.start === null || state.altitude === null) {
+      return '';
+    }
+    var diff = convert(state.altitude - track.start);
+    if (Math.abs(diff) < 0.05) {
+      diff = 0;
+    }
+    return (diff > 0 ? '+' : '') + diff.toFixed(1) + ' ' + unitSymbol();
+  }
+
+  function renderTracking() {
+    var symbol = unitSymbol();
+    var hasAltitude = state.status === 'ok' && state.altitude !== null;
+
+    trackBtn.textContent = track.active ? '停止追踪' : '开始追踪';
+    trackBtn.classList.toggle('is-active', track.active);
+    trackBtn.disabled = !track.active && !hasAltitude;
+
+    trackMaxEl.textContent = track.active && track.max !== null
+      ? formatAltitude(track.max) + ' ' + symbol
+      : '--';
+    trackMinEl.textContent = track.active && track.min !== null
+      ? formatAltitude(track.min) + ' ' + symbol
+      : '--';
+
+    if (track.active) {
+      deltaLabelEl.textContent = '较起点';
+      deltaValueEl.textContent = formatDelta() || '—';
+    } else {
+      deltaLabelEl.textContent = '尚未开始追踪';
+      deltaValueEl.textContent = '';
+    }
+  }
+
+  function toggleTracking() {
+    if (track.active) {
+      track.active = false;
+      track.start = null;
+      track.max = null;
+      track.min = null;
+      renderTracking();
+      return;
+    }
+
+    if (state.status !== 'ok' || state.altitude === null) {
+      return;
+    }
+
+    track.active = true;
+    track.start = state.altitude;
+    track.max = state.altitude;
+    track.min = state.altitude;
+    renderTracking();
+  }
+
   function renderCoords() {
     geoEl.textContent = formatCoords(state.lat, state.lon);
   }
@@ -872,6 +1095,7 @@
     renderAccuracy();
     renderSignal();
     renderRecords();
+    renderTracking();
     renderCoords();
   }
 
@@ -900,7 +1124,7 @@
     state.lat = null;
     state.lon = null;
     setStatus('error');
-    applyZone(ZONES[0]);
+    applyZone(null);
     statusEl.textContent = message;
     renderAll(false);
   }
@@ -926,13 +1150,22 @@
     if (altitude === null) {
       // 部分设备（尤其是未开启 GPS 的机型）不会返回垂直方向数据
       setStatus('warn');
-      applyZone(ZONES[0]);
+      applyZone(null);
       statusEl.textContent = '已定位成功，但当前设备未能提供海拔数据，可在室外开阔处重试。';
     } else {
       setStatus('ok');
       applyZone(zoneFor(altitude));
       statusEl.textContent = '当前海拔';
       updateRecords(altitude);
+
+      if (track.active) {
+        if (track.max === null || altitude > track.max) {
+          track.max = altitude;
+        }
+        if (track.min === null || altitude < track.min) {
+          track.min = altitude;
+        }
+      }
     }
 
     renderAll('count');
@@ -999,6 +1232,7 @@
   /* ---------- 事件绑定 ---------- */
   refreshBtn.addEventListener('click', locate);
   resetBtn.addEventListener('click', resetRecords);
+  trackBtn.addEventListener('click', toggleTracking);
 
   segBtns.forEach(function (btn) {
     btn.addEventListener('click', function () {
@@ -1017,6 +1251,14 @@
   /* ---------- 初始化 ---------- */
   loadStore();
   renderAll(false);
+  syncThemeMeta();
+
+  if (window.matchMedia) {
+    var schemeQuery = window.matchMedia('(prefers-color-scheme: light)');
+    if (schemeQuery && typeof schemeQuery.addEventListener === 'function') {
+      schemeQuery.addEventListener('change', syncThemeMeta);
+    }
+  }
 })();
 </script>
 </body>
