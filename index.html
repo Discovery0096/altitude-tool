@@ -3,19 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#070809">
+<meta name="theme-color" content="#0f172a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="description" content="一个基于浏览器定位的极简海拔测量工具。">
 <title>海拔 · Altitude</title>
 <style>
-  :root {
-    --bg: #070809;
-    --fg: #f4f7fa;
-    --muted: #8a94a6;
-    --accent: #5eead4;
-    --danger: #ff6b6b;
-    --warn: #ffd166;
+  /* 注册后数字渐变色才能随主题平滑过渡（不支持时自动降级为瞬时切换） */
+  @property --num-top {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #ffffff;
+  }
+
+  @property --num-bottom {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #c3cfdb;
   }
 
   * {
@@ -29,10 +33,34 @@
   }
 
   body {
+    /* 默认主题：深海蓝（海拔 < 500m） */
+    --bg: #0f172a;
+    --fg: #f4f7fa;
+    --muted: #93a3b8;
+    --dim: #7d8da3;
+    --surface: rgba(255, 255, 255, 0.05);
+    --edge: rgba(255, 255, 255, 0.09);
+    --num-top: #ffffff;
+    --num-bottom: #c3cfdb;
+    --accent: #5eead4;
+    --pulse: rgba(94, 234, 212, 0.45);
+    --dot-idle: #39424f;
+    --good-fg: #8af3df;
+    --good-bg: rgba(94, 234, 212, 0.1);
+    --good-edge: rgba(94, 234, 212, 0.24);
+    --fair-fg: #ffe0a3;
+    --fair-bg: rgba(255, 209, 102, 0.1);
+    --fair-edge: rgba(255, 209, 102, 0.24);
+    --weak-fg: #ffb9b9;
+    --weak-bg: rgba(255, 107, 107, 0.12);
+    --weak-edge: rgba(255, 107, 107, 0.28);
+    --error-fg: #ffb3b3;
+    --warn-fg: #ffe0a3;
+
     margin: 0;
     height: 100vh;
     height: 100dvh;
-    padding: calc(env(safe-area-inset-top) + 14px) 20px calc(env(safe-area-inset-bottom) + 16px);
+    padding: calc(env(safe-area-inset-top) + 16px) 20px calc(env(safe-area-inset-bottom) + 18px);
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -40,13 +68,56 @@
     overscroll-behavior: none;
     color: var(--fg);
     background-color: var(--bg);
-    background-image:
-      radial-gradient(120% 70% at 50% -8%, #18222d 0%, #0b0f14 46%, #070809 100%);
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC",
+    background-image: radial-gradient(120% 70% at 50% -10%,
+      rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0) 55%);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
       "Helvetica Neue", "Microsoft YaHei", Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -webkit-user-select: none;
     user-select: none;
+    transition: background-color 0.9s ease, color 0.6s ease;
+  }
+
+  /* ---------- 海拔配色区间 ---------- */
+  body[data-zone="forest"] {
+    --bg: #064e3b;
+    --muted: #a9d9c8;
+    --dim: #90c2b1;
+    --surface: rgba(255, 255, 255, 0.07);
+    --edge: rgba(255, 255, 255, 0.13);
+  }
+
+  body[data-zone="rock"] {
+    --bg: #334155;
+    --muted: #c4d1e0;
+    --dim: #a7b5c7;
+    --surface: rgba(255, 255, 255, 0.07);
+    --edge: rgba(255, 255, 255, 0.13);
+  }
+
+  body[data-zone="snow"] {
+    --bg: #e2e8f0;
+    --fg: #0b1220;
+    --muted: #47566b;
+    --dim: #5b6b80;
+    --surface: rgba(15, 23, 42, 0.05);
+    --edge: rgba(15, 23, 42, 0.13);
+    --num-top: #0b1220;
+    --num-bottom: #33415a;
+    --accent: #0f766e;
+    --pulse: rgba(15, 118, 110, 0.35);
+    --dot-idle: #94a3b8;
+    --good-fg: #0f766e;
+    --good-bg: rgba(15, 118, 110, 0.12);
+    --good-edge: rgba(15, 118, 110, 0.28);
+    --fair-fg: #96590a;
+    --fair-bg: rgba(180, 120, 20, 0.14);
+    --fair-edge: rgba(180, 120, 20, 0.3);
+    --weak-fg: #b91c1c;
+    --weak-bg: rgba(185, 28, 28, 0.1);
+    --weak-edge: rgba(185, 28, 28, 0.28);
+    --error-fg: #b91c1c;
+    --warn-fg: #96590a;
   }
 
   /* ---------- 顶栏 ---------- */
@@ -69,13 +140,14 @@
     letter-spacing: 0.3em;
     text-transform: uppercase;
     color: var(--muted);
+    transition: color 0.6s ease;
   }
 
   .dot {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #39424f;
+    background: var(--dot-idle);
     transition: background 0.3s ease, box-shadow 0.3s ease;
   }
 
@@ -85,21 +157,21 @@
   }
   body[data-state="ok"] .dot {
     background: var(--accent);
-    box-shadow: 0 0 0 5px rgba(94, 234, 212, 0.14);
+    box-shadow: 0 0 0 5px var(--good-bg);
   }
   body[data-state="warn"] .dot {
-    background: var(--warn);
-    box-shadow: 0 0 0 5px rgba(255, 209, 102, 0.14);
+    background: #ffd166;
+    box-shadow: 0 0 0 5px var(--fair-bg);
   }
   body[data-state="error"] .dot {
-    background: var(--danger);
-    box-shadow: 0 0 0 5px rgba(255, 107, 107, 0.14);
+    background: #ff6b6b;
+    box-shadow: 0 0 0 5px var(--weak-bg);
   }
 
   @keyframes pulse {
-    0%   { box-shadow: 0 0 0 0 rgba(94, 234, 212, 0.5); }
-    70%  { box-shadow: 0 0 0 10px rgba(94, 234, 212, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(94, 234, 212, 0); }
+    0%   { box-shadow: 0 0 0 0 var(--pulse); }
+    70%  { box-shadow: 0 0 0 10px rgba(0, 0, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
   }
 
   /* ---------- 单位切换 ---------- */
@@ -108,8 +180,9 @@
     display: flex;
     padding: 3px;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background-color: var(--surface);
+    border: 1px solid var(--edge);
+    transition: background-color 0.6s ease, border-color 0.6s ease;
   }
 
   .seg-thumb {
@@ -119,7 +192,8 @@
     width: 42px;
     height: 26px;
     border-radius: 9px;
-    background-image: linear-gradient(180deg, #7ff0dd 0%, #40d7bd 100%);
+    background-image: linear-gradient(180deg, #9df6e8 0%, #45dcc2 100%);
+    box-shadow: 0 4px 10px -4px rgba(45, 212, 191, 0.55);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
@@ -140,11 +214,11 @@
     font-weight: 700;
     letter-spacing: 0.02em;
     color: var(--muted);
-    transition: color 0.3s ease;
+    transition: color 0.4s ease;
   }
 
   .seg.is-active {
-    color: #04120f;
+    color: #04211c;
   }
 
   /* ---------- 主读数 ---------- */
@@ -170,8 +244,7 @@
     font-size: 12.5px;
     font-weight: 600;
     line-height: 1.4;
-    transition: background-color 0.3s ease, border-color 0.3s ease,
-      color 0.3s ease, opacity 0.3s ease;
+    transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease;
   }
 
   .signal[hidden] {
@@ -179,21 +252,21 @@
   }
 
   .signal.good {
-    color: #8af3df;
-    background-color: rgba(94, 234, 212, 0.1);
-    border-color: rgba(94, 234, 212, 0.24);
+    color: var(--good-fg);
+    background-color: var(--good-bg);
+    border-color: var(--good-edge);
   }
 
   .signal.fair {
-    color: #ffe0a3;
-    background-color: rgba(255, 209, 102, 0.1);
-    border-color: rgba(255, 209, 102, 0.24);
+    color: var(--fair-fg);
+    background-color: var(--fair-bg);
+    border-color: var(--fair-edge);
   }
 
   .signal.weak {
-    color: #ffb9b9;
-    background-color: rgba(255, 107, 107, 0.12);
-    border-color: rgba(255, 107, 107, 0.28);
+    color: var(--weak-fg);
+    background-color: var(--weak-bg);
+    border-color: var(--weak-edge);
   }
 
   .readout {
@@ -207,18 +280,21 @@
 
   .value {
     flex: none;
+    font-family: "DIN Alternate", "DIN Condensed", "SF Pro Display", -apple-system,
+      BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Arial, sans-serif;
     font-size: var(--val-size);
-    font-weight: 800;
+    font-weight: 700;
     line-height: 0.86;
-    letter-spacing: -0.055em;
+    letter-spacing: -0.045em;
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum" 1;
-    background-image: linear-gradient(180deg, #ffffff 0%, #c3cfdb 100%);
+    background-image: linear-gradient(180deg, var(--num-top) 0%, var(--num-bottom) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease, font-size 0.35s ease,
+      --num-top 0.9s ease, --num-bottom 0.9s ease;
   }
 
   body[data-state="loading"] .value,
@@ -226,30 +302,14 @@
     opacity: 0.45;
   }
 
-  .value.pop {
-    animation: pop 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
-  }
-
-  .value.swap {
-    animation: swap 0.32s ease;
-  }
-
-  @keyframes pop {
-    from { transform: translateY(8px) scale(0.96); opacity: 0; }
-    to   { transform: none; opacity: 1; }
-  }
-
-  @keyframes swap {
-    from { opacity: 0.25; transform: scale(0.985); }
-    to   { opacity: 1; transform: none; }
-  }
-
   .unit {
+    font-family: "DIN Alternate", "SF Pro Display", -apple-system, BlinkMacSystemFont,
+      "Helvetica Neue", Arial, sans-serif;
     font-size: calc(var(--val-size) * 0.17);
-    font-weight: 600;
+    font-weight: 700;
     color: var(--muted);
     transform: translateX(0.08em);
-    transition: opacity 0.25s ease, color 0.3s ease;
+    transition: opacity 0.25s ease, color 0.6s ease, font-size 0.35s ease;
   }
 
   .unit.is-hidden {
@@ -261,9 +321,9 @@
     min-height: 1.3em;
     font-size: 13px;
     line-height: 1.3;
-    color: #7d8798;
+    color: var(--dim);
     font-variant-numeric: tabular-nums;
-    transition: opacity 0.25s ease;
+    transition: color 0.6s ease, opacity 0.3s ease;
   }
 
   .status {
@@ -276,28 +336,14 @@
     font-size: 14px;
     line-height: 1.55;
     color: var(--muted);
-    transition: color 0.3s ease;
+    transition: color 0.5s ease;
   }
 
   body[data-state="error"] .status {
-    color: #ffb3b3;
+    color: var(--error-fg);
   }
   body[data-state="warn"] .status {
-    color: #ffe0a3;
-  }
-
-  .meta {
-    margin: 0;
-    max-width: 100%;
-    min-height: 1.2em;
-    font-size: 11px;
-    line-height: 1.5;
-    color: #66707f;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-variant-numeric: tabular-nums;
-    transition: opacity 0.3s ease;
+    color: var(--warn-fg);
   }
 
   /* ---------- 底部 ---------- */
@@ -319,17 +365,18 @@
     flex-direction: column;
     gap: 2px;
     padding: 9px 10px;
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    border: 1px solid var(--edge);
     border-radius: 14px;
-    background-color: rgba(255, 255, 255, 0.04);
+    background-color: var(--surface);
     text-align: center;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    transition: background-color 0.6s ease, border-color 0.6s ease;
   }
 
   .record-label {
     font-size: 10.5px;
     letter-spacing: 0.04em;
     color: var(--muted);
+    transition: color 0.6s ease;
   }
 
   .record-value {
@@ -337,7 +384,7 @@
     font-weight: 600;
     line-height: 1.25;
     font-variant-numeric: tabular-nums;
-    transition: opacity 0.3s ease;
+    transition: color 0.6s ease, opacity 0.3s ease;
   }
 
   .actions {
@@ -354,40 +401,48 @@
   }
 
   .primary {
+    position: relative;
     flex: 1;
     padding: 17px 20px;
-    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 20px;
     font-size: 16.5px;
     font-weight: 700;
-    letter-spacing: 0.02em;
-    color: #04120f;
-    background-image: linear-gradient(180deg, #7ff0dd 0%, #40d7bd 100%);
+    letter-spacing: 0.04em;
+    color: #04211c;
+    background-image:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 42%),
+      linear-gradient(180deg, #7ff0dd 0%, #45dcc2 55%, #2bc2a8 100%);
     box-shadow:
-      0 14px 34px -14px rgba(94, 234, 212, 0.6),
-      inset 0 1px 0 rgba(255, 255, 255, 0.45);
-    transition: transform 0.16s ease, opacity 0.2s ease, filter 0.2s ease;
+      0 16px 34px -14px rgba(45, 212, 191, 0.7),
+      0 2px 6px rgba(3, 10, 12, 0.18),
+      inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    transition: transform 0.16s ease, opacity 0.2s ease, filter 0.2s ease,
+      box-shadow 0.2s ease;
   }
 
   .ghost {
     flex: none;
     padding: 0 15px;
-    border-radius: 18px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    border: 1px solid var(--edge);
+    background-color: var(--surface);
     font-size: 12.5px;
     font-weight: 600;
     color: var(--muted);
-    transition: transform 0.16s ease, background-color 0.2s ease, color 0.2s ease,
-      opacity 0.2s ease;
+    transition: transform 0.16s ease, background-color 0.4s ease, color 0.4s ease,
+      border-color 0.4s ease, opacity 0.2s ease;
   }
 
   .primary:active {
     transform: scale(0.975);
+    box-shadow:
+      0 8px 18px -10px rgba(45, 212, 191, 0.7),
+      inset 0 1px 0 rgba(255, 255, 255, 0.45);
   }
 
   .ghost:active {
     transform: scale(0.96);
-    background-color: rgba(255, 255, 255, 0.1);
   }
 
   button:focus-visible {
@@ -402,13 +457,30 @@
     transform: none;
   }
 
+  .geo {
+    margin: 0;
+    min-height: 1.2em;
+    padding-top: 2px;
+    text-align: center;
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+    color: var(--dim);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.6s ease, opacity 0.3s ease;
+  }
+
   /* ---------- 矮屏适配 ---------- */
   @media (max-height: 700px) {
     body {
       gap: 8px;
+      padding-top: calc(env(safe-area-inset-top) + 12px);
+      padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
     }
     .readout {
-      --val-size: clamp(76px, 27vw, 190px);
+      --val-size: clamp(74px, 26vw, 190px);
     }
     .status {
       min-height: 1.6em;
@@ -434,7 +506,7 @@
   }
 </style>
 </head>
-<body data-state="idle">
+<body data-state="idle" data-zone="sea">
 
   <header class="topbar">
     <div class="brand-wrap">
@@ -458,7 +530,6 @@
 
     <p class="accuracy" id="accuracy"></p>
     <p class="status" id="status" role="status" aria-live="polite">点击下方按钮，开始测量当前海拔</p>
-    <p class="meta" id="meta"></p>
   </main>
 
   <div class="bottom">
@@ -476,10 +547,11 @@
       <button class="ghost" id="reset" type="button">重置记录</button>
       <button class="primary" id="refresh" type="button">刷新海拔</button>
     </div>
+    <p class="geo" id="geo"></p>
   </div>
 
   <noscript>
-    <p style="position:fixed;inset:0;margin:0;display:grid;place-items:center;background:#070809;color:#f4f7fa;font-size:16px;">
+    <p style="position:fixed;inset:0;margin:0;display:grid;place-items:center;background:#0f172a;color:#f4f7fa;font-size:16px;">
       需要启用 JavaScript 才能使用海拔工具。
     </p>
   </noscript>
@@ -491,6 +563,7 @@
   var FT_PER_M = 3.28084;
   var STORE_KEY = 'altitudeTool.v1';
   var BUTTON_TEXT = '刷新海拔';
+  var COUNT_DURATION = 520;
 
   // Geolocation 错误码：1 权限拒绝 / 2 位置不可用 / 3 超时
   var ERROR_MESSAGES = {
@@ -499,6 +572,14 @@
     3: '定位超时了，请到室外开阔处再试一次。'
   };
 
+  // 海拔配色区间（上限不含）
+  var ZONES = [
+    { limit: 500, name: 'sea', color: '#0f172a' },
+    { limit: 1500, name: 'forest', color: '#064e3b' },
+    { limit: 3000, name: 'rock', color: '#334155' },
+    { limit: Infinity, name: 'snow', color: '#e2e8f0' }
+  ];
+
   var body = document.body;
   var readoutEl = document.getElementById('readout');
   var valueEl = document.getElementById('value');
@@ -506,12 +587,13 @@
   var signalEl = document.getElementById('signal');
   var accuracyEl = document.getElementById('accuracy');
   var statusEl = document.getElementById('status');
-  var metaEl = document.getElementById('meta');
+  var geoEl = document.getElementById('geo');
   var recordMaxEl = document.getElementById('recordMax');
   var recordMinEl = document.getElementById('recordMin');
   var refreshBtn = document.getElementById('refresh');
   var resetBtn = document.getElementById('reset');
   var unitToggle = document.getElementById('unitToggle');
+  var themeMeta = document.querySelector('meta[name="theme-color"]');
   var segBtns = Array.prototype.slice.call(unitToggle.querySelectorAll('.seg'));
 
   var busy = false;
@@ -523,7 +605,15 @@
     altitude: null,
     accuracy: null,
     max: null,
-    min: null
+    min: null,
+    lat: null,
+    lon: null
+  };
+
+  // 数字滚动动画：shown 记录当前屏幕上显示的数字（当前单位）
+  var counter = {
+    raf: null,
+    shown: null
   };
 
   /* ---------- 本地存储 ---------- */
@@ -589,6 +679,35 @@
     return '误差 ±' + Math.round(meters) + ' 米';
   }
 
+  function formatCoords(lat, lon) {
+    if (lat === null || lon === null) {
+      return '';
+    }
+    var ns = lat >= 0 ? 'N' : 'S';
+    var ew = lon >= 0 ? 'E' : 'W';
+    return Math.abs(lat).toFixed(4) + '° ' + ns + ', ' + Math.abs(lon).toFixed(4) + '° ' + ew;
+  }
+
+  /* ---------- 背景配色 ---------- */
+  function zoneFor(meters) {
+    for (var i = 0; i < ZONES.length; i++) {
+      if (meters < ZONES[i].limit) {
+        return ZONES[i];
+      }
+    }
+    return ZONES[ZONES.length - 1];
+  }
+
+  function applyZone(zone) {
+    if (body.dataset.zone === zone.name) {
+      return;
+    }
+    body.dataset.zone = zone.name;
+    if (themeMeta) {
+      themeMeta.setAttribute('content', zone.color);
+    }
+  }
+
   /* ---------- 自适应字号：保证长数字不溢出 ---------- */
   function fitValue() {
     var avail = document.querySelector('main').clientWidth;
@@ -604,25 +723,95 @@
     readoutEl.style.setProperty('--val-size', Math.max(40, base) + 'px');
   }
 
-  /* ---------- 渲染 ---------- */
-  function renderValue(animate) {
-    var hasAltitude = state.status === 'ok' && state.altitude !== null;
+  /* ---------- 数字滚动 ---------- */
+  function prefersReducedMotion() {
+    return !!(window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
 
-    if (hasAltitude) {
-      valueEl.textContent = formatAltitude(state.altitude);
-      unitEl.textContent = unitSymbol();
-      unitEl.classList.remove('is-hidden');
-    } else {
-      valueEl.textContent = '--';
-      unitEl.classList.add('is-hidden');
+  function stopCounter() {
+    if (counter.raf !== null) {
+      window.cancelAnimationFrame(counter.raf);
+      counter.raf = null;
+    }
+  }
+
+  function setNumber(num) {
+    valueEl.textContent = num.toFixed(1);
+    counter.shown = num;
+  }
+
+  function animateNumber(fromNum, toNum) {
+    stopCounter();
+
+    var from = (typeof fromNum === 'number' && isFinite(fromNum)) ? fromNum : 0;
+
+    if (prefersReducedMotion() || Math.abs(toNum - from) < 0.05) {
+      setNumber(toNum);
+      fitValue();
+      return;
     }
 
+    // 先按两者中较长的字符串确定字号，避免滚动过程中字号抖动
+    var fromText = from.toFixed(1);
+    var toText = toNum.toFixed(1);
+    valueEl.textContent = fromText.length >= toText.length ? fromText : toText;
     fitValue();
 
-    if (hasAltitude && animate) {
-      valueEl.classList.remove('pop', 'swap');
-      void valueEl.offsetWidth;
-      valueEl.classList.add(animate);
+    // 定好字号后立即回到起始值，避免探针文本闪一帧
+    setNumber(from);
+
+    var span = toNum - from;
+    var startTime = null;
+
+    function frame(now) {
+      var time = typeof now === 'number' ? now : Date.now();
+      if (startTime === null) {
+        startTime = time;
+      }
+      var progress = Math.min(1, (time - startTime) / COUNT_DURATION);
+      var eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+
+      setNumber(from + span * eased);
+
+      if (progress < 1) {
+        counter.raf = window.requestAnimationFrame(frame);
+      } else {
+        counter.raf = null;
+        setNumber(toNum);
+        fitValue();
+      }
+    }
+
+    counter.raf = window.requestAnimationFrame(frame);
+  }
+
+  /* ---------- 渲染 ---------- */
+  function renderValue(mode) {
+    var hasAltitude = state.status === 'ok' && state.altitude !== null;
+
+    if (!hasAltitude) {
+      stopCounter();
+      valueEl.textContent = '--';
+      unitEl.textContent = unitSymbol();
+      unitEl.classList.add('is-hidden');
+      if (state.status === 'error') {
+        counter.shown = null;
+      }
+      fitValue();
+      return;
+    }
+
+    var target = convert(state.altitude);
+    unitEl.textContent = unitSymbol();
+    unitEl.classList.remove('is-hidden');
+
+    if (mode === 'count' || mode === 'unit') {
+      animateNumber(counter.shown, target);
+    } else {
+      stopCounter();
+      setNumber(target);
+      fitValue();
     }
   }
 
@@ -663,6 +852,10 @@
     recordMinEl.textContent = state.min === null ? '--' : formatAltitude(state.min) + ' ' + symbol;
   }
 
+  function renderCoords() {
+    geoEl.textContent = formatCoords(state.lat, state.lon);
+  }
+
   function renderUnitToggle() {
     unitToggle.dataset.active = state.unit;
     segBtns.forEach(function (btn) {
@@ -673,12 +866,13 @@
     unitEl.textContent = unitSymbol();
   }
 
-  function renderAll(animate) {
+  function renderAll(mode) {
     renderUnitToggle();
-    renderValue(animate);
+    renderValue(mode);
     renderAccuracy();
     renderSignal();
     renderRecords();
+    renderCoords();
   }
 
   function setStatus(stateName) {
@@ -703,9 +897,11 @@
     refreshBtn.textContent = BUTTON_TEXT;
     state.altitude = null;
     state.accuracy = null;
+    state.lat = null;
+    state.lon = null;
     setStatus('error');
+    applyZone(ZONES[0]);
     statusEl.textContent = message;
-    metaEl.textContent = '';
     renderAll(false);
   }
 
@@ -724,36 +920,22 @@
 
     state.accuracy = accuracy;
     state.altitude = altitude;
+    state.lat = coords.latitude;
+    state.lon = coords.longitude;
 
     if (altitude === null) {
       // 部分设备（尤其是未开启 GPS 的机型）不会返回垂直方向数据
       setStatus('warn');
+      applyZone(ZONES[0]);
       statusEl.textContent = '已定位成功，但当前设备未能提供海拔数据，可在室外开阔处重试。';
     } else {
       setStatus('ok');
+      applyZone(zoneFor(altitude));
       statusEl.textContent = '当前海拔';
       updateRecords(altitude);
     }
 
-    var parts = [
-      '纬度 ' + coords.latitude.toFixed(5),
-      '经度 ' + coords.longitude.toFixed(5)
-    ];
-
-    if (accuracy !== null) {
-      parts.push('水平精度 ±' + Math.round(accuracy) + ' m');
-    }
-
-    var time = new Date(position.timestamp).toLocaleTimeString('zh-CN', {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false
-    });
-
-    metaEl.textContent = parts.join(' · ') + ' · 更新于 ' + time;
-
-    renderAll('pop');
+    renderAll('count');
   }
 
   function locate() {
@@ -771,7 +953,6 @@
     refreshBtn.textContent = '定位中…';
     setStatus('loading');
     statusEl.textContent = '正在定位...';
-    metaEl.textContent = '';
     renderAll(false);
 
     navigator.geolocation.getCurrentPosition(
@@ -793,7 +974,7 @@
     }
     state.unit = unit;
     saveStore();
-    renderAll(state.status === 'ok' ? 'swap' : false);
+    renderAll(state.status === 'ok' ? 'unit' : false);
   }
 
   function resetRecords() {
