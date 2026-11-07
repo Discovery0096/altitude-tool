@@ -23,22 +23,25 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  html {
+  html,
+  body {
     height: 100%;
   }
 
   body {
     margin: 0;
-    min-height: 100vh;
-    min-height: 100dvh;
-    padding: calc(env(safe-area-inset-top) + 20px) 22px calc(env(safe-area-inset-bottom) + 22px);
+    height: 100vh;
+    height: 100dvh;
+    padding: calc(env(safe-area-inset-top) + 14px) 20px calc(env(safe-area-inset-bottom) + 16px);
     display: flex;
     flex-direction: column;
+    gap: 12px;
     overflow: hidden;
+    overscroll-behavior: none;
     color: var(--fg);
     background-color: var(--bg);
     background-image:
-      radial-gradient(120% 75% at 50% -8%, #18222d 0%, #0b0f14 46%, #070809 100%);
+      radial-gradient(120% 70% at 50% -8%, #18222d 0%, #0b0f14 46%, #070809 100%);
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC",
       "Helvetica Neue", "Microsoft YaHei", Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -48,14 +51,20 @@
 
   /* ---------- 顶栏 ---------- */
   .topbar {
+    flex: none;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex: none;
+  }
+
+  .brand-wrap {
+    display: flex;
+    align-items: center;
+    gap: 9px;
   }
 
   .brand {
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 600;
     letter-spacing: 0.3em;
     text-transform: uppercase;
@@ -63,8 +72,8 @@
   }
 
   .dot {
-    width: 9px;
-    height: 9px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background: #39424f;
     transition: background 0.3s ease, box-shadow 0.3s ease;
@@ -93,6 +102,51 @@
     100% { box-shadow: 0 0 0 0 rgba(94, 234, 212, 0); }
   }
 
+  /* ---------- 单位切换 ---------- */
+  .segmented {
+    position: relative;
+    display: flex;
+    padding: 3px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .seg-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 42px;
+    height: 26px;
+    border-radius: 9px;
+    background-image: linear-gradient(180deg, #7ff0dd 0%, #40d7bd 100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .segmented[data-active="ft"] .seg-thumb {
+    transform: translateX(42px);
+  }
+
+  .seg {
+    position: relative;
+    z-index: 1;
+    width: 42px;
+    height: 26px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+    transition: color 0.3s ease;
+  }
+
+  .seg.is-active {
+    color: #04120f;
+  }
+
   /* ---------- 主读数 ---------- */
   main {
     flex: 1 1 auto;
@@ -105,20 +159,59 @@
     text-align: center;
   }
 
+  .signal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    padding: 6px 14px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 600;
+    line-height: 1.4;
+    transition: background-color 0.3s ease, border-color 0.3s ease,
+      color 0.3s ease, opacity 0.3s ease;
+  }
+
+  .signal[hidden] {
+    display: none;
+  }
+
+  .signal.good {
+    color: #8af3df;
+    background-color: rgba(94, 234, 212, 0.1);
+    border-color: rgba(94, 234, 212, 0.24);
+  }
+
+  .signal.fair {
+    color: #ffe0a3;
+    background-color: rgba(255, 209, 102, 0.1);
+    border-color: rgba(255, 209, 102, 0.24);
+  }
+
+  .signal.weak {
+    color: #ffb9b9;
+    background-color: rgba(255, 107, 107, 0.12);
+    border-color: rgba(255, 107, 107, 0.28);
+  }
+
   .readout {
+    --val-size: clamp(86px, 31vw, 230px);
     display: flex;
     align-items: baseline;
     justify-content: center;
-    gap: 0.04em;
+    max-width: 100%;
     line-height: 1;
   }
 
   .value {
-    display: inline-block;
-    font-size: clamp(92px, 33vw, 250px);
+    flex: none;
+    font-size: var(--val-size);
     font-weight: 800;
     line-height: 0.86;
     letter-spacing: -0.055em;
+    white-space: nowrap;
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum" 1;
     background-image: linear-gradient(180deg, #ffffff 0%, #c3cfdb 100%);
@@ -137,30 +230,53 @@
     animation: pop 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
+  .value.swap {
+    animation: swap 0.32s ease;
+  }
+
   @keyframes pop {
     from { transform: translateY(8px) scale(0.96); opacity: 0; }
     to   { transform: none; opacity: 1; }
   }
 
+  @keyframes swap {
+    from { opacity: 0.25; transform: scale(0.985); }
+    to   { opacity: 1; transform: none; }
+  }
+
   .unit {
-    font-size: clamp(22px, 6.5vw, 46px);
+    font-size: calc(var(--val-size) * 0.17);
     font-weight: 600;
-    letter-spacing: 0;
     color: var(--muted);
-    transition: opacity 0.25s ease;
+    transform: translateX(0.08em);
+    transition: opacity 0.25s ease, color 0.3s ease;
   }
 
   .unit.is-hidden {
     opacity: 0;
   }
 
+  .accuracy {
+    margin: 0;
+    min-height: 1.3em;
+    font-size: 13px;
+    line-height: 1.3;
+    color: #7d8798;
+    font-variant-numeric: tabular-nums;
+    transition: opacity 0.25s ease;
+  }
+
   .status {
     margin: 0;
-    max-width: 20em;
+    max-width: 21em;
     min-height: 3em;
-    font-size: 15px;
-    line-height: 1.6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    line-height: 1.55;
     color: var(--muted);
+    transition: color 0.3s ease;
   }
 
   body[data-state="error"] .status {
@@ -170,45 +286,108 @@
     color: #ffe0a3;
   }
 
-  /* ---------- 底部操作区 ---------- */
-  .bottom {
-    flex: none;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
   .meta {
     margin: 0;
-    min-height: 1.3em;
-    font-size: 12.5px;
-    line-height: 1.7;
-    text-align: center;
-    color: #6f7a8b;
+    max-width: 100%;
+    min-height: 1.2em;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #66707f;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     font-variant-numeric: tabular-nums;
     transition: opacity 0.3s ease;
   }
 
+  /* ---------- 底部 ---------- */
+  .bottom {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .records {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .record {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 9px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 14px;
+    background-color: rgba(255, 255, 255, 0.04);
+    text-align: center;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  .record-label {
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+
+  .record-value {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.25;
+    font-variant-numeric: tabular-nums;
+    transition: opacity 0.3s ease;
+  }
+
+  .actions {
+    display: flex;
+    gap: 10px;
+  }
+
   button {
-    width: 100%;
-    padding: 19px 24px;
-    border: 0;
-    border-radius: 20px;
     font-family: inherit;
-    font-size: 17px;
+    border: 0;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .primary {
+    flex: 1;
+    padding: 17px 20px;
+    border-radius: 18px;
+    font-size: 16.5px;
     font-weight: 700;
     letter-spacing: 0.02em;
     color: #04120f;
     background-image: linear-gradient(180deg, #7ff0dd 0%, #40d7bd 100%);
     box-shadow:
-      0 14px 34px -14px rgba(94, 234, 212, 0.65),
+      0 14px 34px -14px rgba(94, 234, 212, 0.6),
       inset 0 1px 0 rgba(255, 255, 255, 0.45);
-    cursor: pointer;
     transition: transform 0.16s ease, opacity 0.2s ease, filter 0.2s ease;
   }
 
-  button:active {
+  .ghost {
+    flex: none;
+    padding: 0 15px;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.05);
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--muted);
+    transition: transform 0.16s ease, background-color 0.2s ease, color 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  .primary:active {
     transform: scale(0.975);
+  }
+
+  .ghost:active {
+    transform: scale(0.96);
+    background-color: rgba(255, 255, 255, 0.1);
   }
 
   button:focus-visible {
@@ -216,11 +395,31 @@
     outline-offset: 3px;
   }
 
-  button:disabled {
+  .primary:disabled {
     opacity: 0.55;
     filter: saturate(0.5);
     cursor: default;
     transform: none;
+  }
+
+  /* ---------- 矮屏适配 ---------- */
+  @media (max-height: 700px) {
+    body {
+      gap: 8px;
+    }
+    .readout {
+      --val-size: clamp(76px, 27vw, 190px);
+    }
+    .status {
+      min-height: 1.6em;
+      font-size: 13px;
+    }
+    .record {
+      padding: 7px 10px;
+    }
+    .primary {
+      padding: 15px 20px;
+    }
   }
 
   /* ---------- 无障碍：减少动效 ---------- */
@@ -237,22 +436,46 @@
 </head>
 <body data-state="idle">
 
-  <div class="topbar">
-    <span class="brand">Altitude</span>
-    <span class="dot" id="dot" aria-hidden="true"></span>
-  </div>
+  <header class="topbar">
+    <div class="brand-wrap">
+      <span class="dot" aria-hidden="true"></span>
+      <span class="brand">Altitude</span>
+    </div>
+    <div class="segmented" id="unitToggle" data-active="m" role="group" aria-label="海拔单位">
+      <span class="seg-thumb" aria-hidden="true"></span>
+      <button type="button" class="seg is-active" data-unit="m" aria-pressed="true" aria-label="米">m</button>
+      <button type="button" class="seg" data-unit="ft" aria-pressed="false" aria-label="英尺">ft</button>
+    </div>
+  </header>
 
   <main>
-    <div class="readout" aria-hidden="true">
+    <div class="signal" id="signal" role="status" aria-live="polite" hidden></div>
+
+    <div class="readout" id="readout" aria-hidden="true">
       <span class="value" id="value">--</span>
       <span class="unit is-hidden" id="unit">m</span>
     </div>
+
+    <p class="accuracy" id="accuracy"></p>
     <p class="status" id="status" role="status" aria-live="polite">点击下方按钮，开始测量当前海拔</p>
+    <p class="meta" id="meta"></p>
   </main>
 
   <div class="bottom">
-    <p class="meta" id="meta"></p>
-    <button id="refresh" type="button">刷新海拔</button>
+    <div class="records">
+      <div class="record">
+        <span class="record-label">本次最高</span>
+        <span class="record-value" id="recordMax">--</span>
+      </div>
+      <div class="record">
+        <span class="record-label">本次最低</span>
+        <span class="record-value" id="recordMin">--</span>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="ghost" id="reset" type="button">重置记录</button>
+      <button class="primary" id="refresh" type="button">刷新海拔</button>
+    </div>
   </div>
 
   <noscript>
@@ -265,15 +488,9 @@
 (function () {
   'use strict';
 
-  var valueEl = document.getElementById('value');
-  var unitEl = document.getElementById('unit');
-  var statusEl = document.getElementById('status');
-  var metaEl = document.getElementById('meta');
-  var btn = document.getElementById('refresh');
-  var body = document.body;
-
+  var FT_PER_M = 3.28084;
+  var STORE_KEY = 'altitudeTool.v1';
   var BUTTON_TEXT = '刷新海拔';
-  var busy = false;
 
   // Geolocation 错误码：1 权限拒绝 / 2 位置不可用 / 3 超时
   var ERROR_MESSAGES = {
@@ -282,47 +499,240 @@
     3: '定位超时了，请到室外开阔处再试一次。'
   };
 
-  function setState(state) {
-    body.dataset.state = state;
+  var body = document.body;
+  var readoutEl = document.getElementById('readout');
+  var valueEl = document.getElementById('value');
+  var unitEl = document.getElementById('unit');
+  var signalEl = document.getElementById('signal');
+  var accuracyEl = document.getElementById('accuracy');
+  var statusEl = document.getElementById('status');
+  var metaEl = document.getElementById('meta');
+  var recordMaxEl = document.getElementById('recordMax');
+  var recordMinEl = document.getElementById('recordMin');
+  var refreshBtn = document.getElementById('refresh');
+  var resetBtn = document.getElementById('reset');
+  var unitToggle = document.getElementById('unitToggle');
+  var segBtns = Array.prototype.slice.call(unitToggle.querySelectorAll('.seg'));
+
+  var busy = false;
+
+  // 海拔与精度统一以米为单位存储，显示时再按单位换算
+  var state = {
+    unit: 'm',
+    status: 'idle',   // idle | loading | ok | warn | error
+    altitude: null,
+    accuracy: null,
+    max: null,
+    min: null
+  };
+
+  /* ---------- 本地存储 ---------- */
+  function loadStore() {
+    try {
+      var raw = window.localStorage.getItem(STORE_KEY);
+      if (!raw) {
+        return;
+      }
+      var data = JSON.parse(raw);
+      if (!data || typeof data !== 'object') {
+        return;
+      }
+      if (data.unit === 'ft' || data.unit === 'm') {
+        state.unit = data.unit;
+      }
+      if (typeof data.max === 'number' && isFinite(data.max)) {
+        state.max = data.max;
+      }
+      if (typeof data.min === 'number' && isFinite(data.min)) {
+        state.min = data.min;
+      }
+    } catch (err) {
+      // 隐私模式下 localStorage 可能不可用，忽略即可
+    }
   }
 
-  function setReadout(text, showUnit) {
-    valueEl.textContent = text;
-    unitEl.classList.toggle('is-hidden', !showUnit);
+  function saveStore() {
+    try {
+      window.localStorage.setItem(STORE_KEY, JSON.stringify({
+        unit: state.unit,
+        max: state.max,
+        min: state.min
+      }));
+    } catch (err) {
+      // 写入失败时仅本次会话生效
+    }
+  }
+
+  /* ---------- 格式化 ---------- */
+  function convert(meters) {
+    return state.unit === 'ft' ? meters * FT_PER_M : meters;
+  }
+
+  function unitSymbol() {
+    return state.unit === 'ft' ? 'ft' : 'm';
+  }
+
+  function formatAltitude(meters) {
+    if (meters === null || typeof meters !== 'number' || isNaN(meters)) {
+      return '--';
+    }
+    return convert(meters).toFixed(1);
+  }
+
+  function formatAccuracy(meters) {
+    if (meters === null || typeof meters !== 'number' || isNaN(meters)) {
+      return '';
+    }
+    if (state.unit === 'ft') {
+      return '误差 ±' + (meters * FT_PER_M).toFixed(1) + ' 英尺';
+    }
+    return '误差 ±' + Math.round(meters) + ' 米';
+  }
+
+  /* ---------- 自适应字号：保证长数字不溢出 ---------- */
+  function fitValue() {
+    var avail = document.querySelector('main').clientWidth;
+    if (!avail) {
+      return;
+    }
+    readoutEl.style.removeProperty('--val-size');
+    var base = parseFloat(window.getComputedStyle(valueEl).fontSize);
+    var natural = valueEl.scrollWidth + unitEl.offsetWidth + 6;
+    if (natural > avail && natural > 0) {
+      base = Math.floor(base * avail / natural * 0.97);
+    }
+    readoutEl.style.setProperty('--val-size', Math.max(40, base) + 'px');
+  }
+
+  /* ---------- 渲染 ---------- */
+  function renderValue(animate) {
+    var hasAltitude = state.status === 'ok' && state.altitude !== null;
+
+    if (hasAltitude) {
+      valueEl.textContent = formatAltitude(state.altitude);
+      unitEl.textContent = unitSymbol();
+      unitEl.classList.remove('is-hidden');
+    } else {
+      valueEl.textContent = '--';
+      unitEl.classList.add('is-hidden');
+    }
+
+    fitValue();
+
+    if (hasAltitude && animate) {
+      valueEl.classList.remove('pop', 'swap');
+      void valueEl.offsetWidth;
+      valueEl.classList.add(animate);
+    }
+  }
+
+  function renderAccuracy() {
+    var hasAltitude = state.status === 'ok' && state.altitude !== null;
+    accuracyEl.textContent = hasAltitude ? formatAccuracy(state.accuracy) : '';
+  }
+
+  function renderSignal() {
+    var accuracy = state.accuracy;
+    var hasAltitude = state.status === 'ok' && state.altitude !== null;
+
+    signalEl.classList.remove('good', 'fair', 'weak');
+
+    if (!hasAltitude || accuracy === null) {
+      signalEl.hidden = true;
+      signalEl.textContent = '';
+      return;
+    }
+
+    signalEl.hidden = false;
+
+    if (accuracy > 50) {
+      signalEl.classList.add('weak');
+      signalEl.textContent = '⚠️ 信号较弱，当前为粗略海拔，请移至开阔地带';
+    } else if (accuracy > 10) {
+      signalEl.classList.add('fair');
+      signalEl.textContent = '信号一般';
+    } else {
+      signalEl.classList.add('good');
+      signalEl.textContent = '信号良好';
+    }
+  }
+
+  function renderRecords() {
+    var symbol = unitSymbol();
+    recordMaxEl.textContent = state.max === null ? '--' : formatAltitude(state.max) + ' ' + symbol;
+    recordMinEl.textContent = state.min === null ? '--' : formatAltitude(state.min) + ' ' + symbol;
+  }
+
+  function renderUnitToggle() {
+    unitToggle.dataset.active = state.unit;
+    segBtns.forEach(function (btn) {
+      var active = btn.dataset.unit === state.unit;
+      btn.classList.toggle('is-active', active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+    unitEl.textContent = unitSymbol();
+  }
+
+  function renderAll(animate) {
+    renderUnitToggle();
+    renderValue(animate);
+    renderAccuracy();
+    renderSignal();
+    renderRecords();
+  }
+
+  function setStatus(stateName) {
+    state.status = stateName;
+    body.dataset.state = stateName;
+  }
+
+  /* ---------- 业务 ---------- */
+  function updateRecords(altitude) {
+    if (state.max === null || altitude > state.max) {
+      state.max = altitude;
+    }
+    if (state.min === null || altitude < state.min) {
+      state.min = altitude;
+    }
+    saveStore();
   }
 
   function showError(message) {
     busy = false;
-    btn.disabled = false;
-    btn.textContent = BUTTON_TEXT;
-    setState('error');
-    setReadout('--', false);
+    refreshBtn.disabled = false;
+    refreshBtn.textContent = BUTTON_TEXT;
+    state.altitude = null;
+    state.accuracy = null;
+    setStatus('error');
     statusEl.textContent = message;
     metaEl.textContent = '';
+    renderAll(false);
   }
 
   function showSuccess(position) {
     var coords = position.coords;
-    var altitude = coords.altitude;
+    var accuracy = typeof coords.accuracy === 'number' && isFinite(coords.accuracy)
+      ? coords.accuracy
+      : null;
+    var altitude = typeof coords.altitude === 'number' && isFinite(coords.altitude)
+      ? coords.altitude
+      : null;
 
     busy = false;
-    btn.disabled = false;
-    btn.textContent = BUTTON_TEXT;
+    refreshBtn.disabled = false;
+    refreshBtn.textContent = BUTTON_TEXT;
 
-    // 部分设备（尤其是未开启 GPS 的机型）不会返回垂直方向数据
-    if (altitude === null || typeof altitude !== 'number' || isNaN(altitude)) {
-      setState('warn');
-      setReadout('--', false);
-      statusEl.textContent = '已定位成功，但当前设备未能提供海拔数据。可在室外开阔处重试。';
+    state.accuracy = accuracy;
+    state.altitude = altitude;
+
+    if (altitude === null) {
+      // 部分设备（尤其是未开启 GPS 的机型）不会返回垂直方向数据
+      setStatus('warn');
+      statusEl.textContent = '已定位成功，但当前设备未能提供海拔数据，可在室外开阔处重试。';
     } else {
-      setState('ok');
-      setReadout(String(Math.round(altitude)), true);
+      setStatus('ok');
       statusEl.textContent = '当前海拔';
-
-      // 重新触发数字动画
-      valueEl.classList.remove('pop');
-      void valueEl.offsetWidth;
-      valueEl.classList.add('pop');
+      updateRecords(altitude);
     }
 
     var parts = [
@@ -330,8 +740,8 @@
       '经度 ' + coords.longitude.toFixed(5)
     ];
 
-    if (typeof coords.accuracy === 'number') {
-      parts.push('水平精度 ±' + Math.round(coords.accuracy) + ' m');
+    if (accuracy !== null) {
+      parts.push('水平精度 ±' + Math.round(accuracy) + ' m');
     }
 
     var time = new Date(position.timestamp).toLocaleTimeString('zh-CN', {
@@ -342,6 +752,8 @@
     });
 
     metaEl.textContent = parts.join(' · ') + ' · 更新于 ' + time;
+
+    renderAll('pop');
   }
 
   function locate() {
@@ -355,12 +767,12 @@
     }
 
     busy = true;
-    btn.disabled = true;
-    btn.textContent = '定位中…';
-    setState('loading');
-    setReadout('--', false);
+    refreshBtn.disabled = true;
+    refreshBtn.textContent = '定位中…';
+    setStatus('loading');
     statusEl.textContent = '正在定位...';
     metaEl.textContent = '';
+    renderAll(false);
 
     navigator.geolocation.getCurrentPosition(
       showSuccess,
@@ -375,7 +787,55 @@
     );
   }
 
-  btn.addEventListener('click', locate);
+  function setUnit(unit) {
+    if (state.unit === unit) {
+      return;
+    }
+    state.unit = unit;
+    saveStore();
+    renderAll(state.status === 'ok' ? 'swap' : false);
+  }
+
+  function resetRecords() {
+    state.max = null;
+    state.min = null;
+    saveStore();
+    renderRecords();
+
+    // 旧版浏览器没有 Web Animations API，跳过淡入即可
+    if (typeof recordMaxEl.animate === 'function') {
+      recordMaxEl.animate(
+        [{ opacity: 0.2 }, { opacity: 1 }],
+        { duration: 260, easing: 'ease-out' }
+      );
+      recordMinEl.animate(
+        [{ opacity: 0.2 }, { opacity: 1 }],
+        { duration: 260, easing: 'ease-out' }
+      );
+    }
+  }
+
+  /* ---------- 事件绑定 ---------- */
+  refreshBtn.addEventListener('click', locate);
+  resetBtn.addEventListener('click', resetRecords);
+
+  segBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      setUnit(btn.dataset.unit);
+    });
+  });
+
+  window.addEventListener('resize', function () {
+    fitValue();
+  });
+
+  window.addEventListener('orientationchange', function () {
+    window.setTimeout(fitValue, 120);
+  });
+
+  /* ---------- 初始化 ---------- */
+  loadStore();
+  renderAll(false);
 })();
 </script>
 </body>
