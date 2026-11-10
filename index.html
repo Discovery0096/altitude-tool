@@ -315,6 +315,100 @@ transition: opacity 0.25s ease, color 0.6s ease, font-size 0.35s ease;
 .unit.is-hidden {
 opacity: 0;
 }
+.quick-row {
+width: 100%;
+max-width: 22em;
+min-height: 28px;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 7px;
+}
+.pill {
+position: relative;
+display: inline-flex;
+align-items: center;
+gap: 5px;
+flex: none;
+height: 28px;
+padding: 0 10px;
+border: 1px solid var(--edge);
+border-radius: 999px;
+background-color: var(--glass);
+-webkit-backdrop-filter: blur(10px);
+backdrop-filter: blur(10px);
+box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+font-family: inherit;
+font-size: 11.5px;
+font-weight: 500;
+line-height: 1;
+color: var(--muted);
+white-space: nowrap;
+transition: color 0.25s ease, background-color 0.25s ease, border-color 0.25s ease,
+transform 0.16s ease;
+}
+.pill-icon {
+flex: none;
+display: block;
+width: 13px;
+height: 13px;
+opacity: 0.7;
+}
+.pill-value {
+display: block;
+min-width: 0;
+font-variant-numeric: tabular-nums;
+letter-spacing: 0.01em;
+}
+.pill-temp .pill-value,
+.pill-place .pill-value {
+color: var(--fg);
+}
+.pill-place {
+min-width: 0;
+flex: 0 1 auto;
+}
+.pill-place .pill-value {
+overflow: hidden;
+text-overflow: ellipsis;
+}
+.pill-compass {
+color: var(--muted);
+cursor: default;
+}
+.pill-compass:disabled {
+opacity: 1;
+cursor: default;
+}
+.pill-compass.is-action {
+color: var(--accent);
+border-color: var(--accent);
+cursor: pointer;
+}
+.pill-compass.is-action::after {
+content: "";
+position: absolute;
+inset: -8px -5px;
+}
+.pill-compass.is-action:active {
+transform: scale(0.97);
+}
+.pill-compass.is-live {
+color: var(--fg);
+}
+.pill-compass.is-live .pill-value {
+color: var(--accent);
+}
+.pill-compass.is-live .pill-icon {
+opacity: 0.85;
+}
+.pill-compass.is-denied {
+color: var(--error-fg);
+border-color: var(--edge);
+}
+.pill-compass.is-waiting {
+color: var(--muted);
+}
 .track-row {
 width: 100%;
 max-width: 19em;
@@ -526,11 +620,17 @@ to { transform: rotate(360deg); }
 margin-top: 10px;
 padding-top: 9px;
 border-top: 1px solid var(--edge);
-text-align: center;
+display: flex;
+align-items: baseline;
+justify-content: center;
+gap: 7px;
+min-width: 0;
 transition: border-color 0.6s ease;
 }
 .coords {
 display: block;
+flex: 0 1 auto;
+min-width: 0;
 font-size: 12.5px;
 letter-spacing: 0.04em;
 line-height: 1.4;
@@ -540,6 +640,15 @@ white-space: nowrap;
 overflow: hidden;
 text-overflow: ellipsis;
 transition: color 0.6s ease;
+}
+.source-note {
+flex: none;
+font-size: 9px;
+line-height: 1.2;
+letter-spacing: 0.02em;
+color: var(--dim);
+opacity: 0.75;
+white-space: nowrap;
 }
 @media (max-height: 700px) {
 body {
@@ -580,6 +689,23 @@ max-width: none;
 font-size: 12px;
 line-height: 1.4;
 }
+.quick-row {
+min-height: 24px;
+gap: 5px;
+}
+.pill {
+height: 24px;
+padding: 0 9px;
+gap: 4px;
+font-size: 11px;
+}
+.pill-icon {
+width: 12px;
+height: 12px;
+}
+.source-note {
+font-size: 8.5px;
+}
 .chart-wrap {
 height: 46px;
 margin-top: 0;
@@ -613,13 +739,30 @@ font-size: 12px;
 }
 @media (orientation: landscape) and (max-height: 360px) {
 main {
-gap: 4px;
+gap: 3px;
 }
 .readout {
---val-size: clamp(46px, 18vh, 96px);
+--val-size: clamp(40px, 15vh, 96px);
+}
+.quick-row {
+min-height: 20px;
+gap: 4px;
+}
+.pill {
+height: 20px;
+padding: 0 8px;
+gap: 4px;
+font-size: 10.5px;
+}
+.pill-icon {
+width: 11px;
+height: 11px;
+}
+.source-note {
+font-size: 8px;
 }
 .chart-wrap {
-height: 38px;
+height: 34px;
 }
 .panel {
 padding: 7px 12px;
@@ -627,6 +770,26 @@ padding: 7px 12px;
 .coords-row {
 margin-top: 5px;
 padding-top: 5px;
+}
+}
+@media (max-width: 359px) {
+.quick-row {
+gap: 5px;
+}
+.pill {
+padding: 0 8px;
+gap: 4px;
+font-size: 11px;
+}
+.pill-icon {
+width: 12px;
+height: 12px;
+}
+.source-note {
+font-size: 8px;
+}
+.coords-row {
+gap: 5px;
 }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -669,6 +832,29 @@ transition-duration: 0.001ms !important;
 <span class="value" id="value">--</span>
 <span class="unit is-hidden" id="unit">m</span>
 </div>
+<div class="quick-row" id="quickRow">
+<button class="pill pill-compass" id="compassPill" type="button" aria-label="指南针" disabled>
+<svg class="pill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<circle cx="12" cy="12" r="8.5"/>
+<path d="M15.2 8.8 13 13l-4.2 2.2L11 11z"/>
+</svg>
+<span class="pill-value" id="compassValue">指南针</span>
+</button>
+<div class="pill pill-temp" id="tempPill" aria-label="当地气温" title="气温数据：Open-Meteo (CC BY 4.0)">
+<svg class="pill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M10 13.8V6a2 2 0 1 1 4 0v7.8a4 4 0 1 1-4 0z"/>
+<path d="M12 9v6"/>
+</svg>
+<span class="pill-value" id="tempValue">--</span>
+</div>
+<div class="pill pill-place" id="placePill" aria-label="当前地名" title="地名数据：BigDataCloud / OpenStreetMap">
+<svg class="pill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M12 21s6-5.3 6-10a6 6 0 1 0-12 0c0 4.7 6 10 6 10z"/>
+<circle cx="12" cy="11" r="2.2"/>
+</svg>
+<span class="pill-value" id="placeValue">--</span>
+</div>
+</div>
 <div class="track-row">
 <div class="track-info">
 <span class="track-label" id="trackLabel">尚未开始追踪</span>
@@ -708,6 +894,7 @@ transition-duration: 0.001ms !important;
 </div>
 <div class="coords-row">
 <span class="coords" id="geo">—</span>
+<span class="source-note" title="地名：BigDataCloud（数据 © OpenStreetMap contributors）；气温：Open-Meteo（CC BY 4.0）">© BigDataCloud · Open-Meteo</span>
 </div>
 </section>
 </div>
@@ -723,6 +910,11 @@ var FT_PER_M = 3.28084;
 var STORE_KEY = 'altitudeTool.v1';
 var COUNT_DURATION = 520;
 var SAMPLE_INTERVAL = 15000;
+var PLACE_API = 'https://api.bigdatacloud.net/data/reverse-geocode-client';
+var WEATHER_API = 'https://api.open-meteo.com/v1/forecast';
+var ENV_TIMEOUT = 8000;
+var COMPASS_TIMEOUT = 3000;
+var DIRECTIONS = ['北', '东北', '东', '东南', '南', '西南', '西', '西北'];
 var SEA_LEVEL_PRESSURE = 1013.25;
 var ERROR_MESSAGES = {
 1: '定位权限被拒绝。请到浏览器或系统设置中允许访问位置，然后重试。',
@@ -755,6 +947,12 @@ var altMinEl = document.getElementById('altMin');
 var chartWrap = document.getElementById('chartWrap');
 var chartCanvas = document.getElementById('chart');
 var chartCtx = chartCanvas && chartCanvas.getContext ? chartCanvas.getContext('2d') : null;
+var compassPill = document.getElementById('compassPill');
+var compassValueEl = document.getElementById('compassValue');
+var tempPill = document.getElementById('tempPill');
+var tempValueEl = document.getElementById('tempValue');
+var placePill = document.getElementById('placePill');
+var placeValueEl = document.getElementById('placeValue');
 var geoEl = document.getElementById('geo');
 var trackLabelEl = document.getElementById('trackLabel');
 var trackValueEl = document.getElementById('trackValue');
@@ -782,6 +980,23 @@ samples: []
 var stats = {
 min: null,
 max: null
+};
+var env = {
+seq: 0,
+controller: null,
+temp: null,
+place: ''
+};
+var compass = {
+supported: typeof window.DeviceOrientationEvent !== 'undefined',
+needsPermission: false,
+permission: 'unknown',
+state: 'idle',
+listening: false,
+heading: null,
+lastAt: 0,
+lastText: '',
+timer: null
 };
 var counter = {
 raf: null,
@@ -836,6 +1051,328 @@ return '—';
 var ns = lat >= 0 ? 'N' : 'S';
 var ew = lon >= 0 ? 'E' : 'W';
 return Math.abs(lat).toFixed(4) + '° ' + ns + ', ' + Math.abs(lon).toFixed(4) + '° ' + ew;
+}
+function formatPlaceName(data) {
+if (!data) {
+return '';
+}
+var city = typeof data.city === 'string' ? data.city.trim() : '';
+var district = '';
+var list = data.localityInfo && data.localityInfo.administrative;
+if (Array.isArray(list)) {
+for (var i = 0; i < list.length; i++) {
+var item = list[i];
+if (item && item.adminLevel === 6 && typeof item.name === 'string') {
+district = item.name.trim();
+break;
+}
+}
+}
+if (!district && typeof data.locality === 'string') {
+district = data.locality.trim();
+}
+if (city && district && city.indexOf(district) >= 0) {
+district = '';
+}
+if (city && district) {
+var separator = /[\u4e00-\u9fff]/.test(city + district) ? '' : ' ';
+return city + separator + district;
+}
+if (city) {
+return city;
+}
+if (district) {
+return district;
+}
+if (typeof data.principalSubdivision === 'string' && data.principalSubdivision.trim()) {
+return data.principalSubdivision.trim();
+}
+if (typeof data.countryName === 'string' && data.countryName.trim()) {
+return data.countryName.trim();
+}
+return '';
+}
+function fetchJson(url, controller) {
+if (typeof window.fetch !== 'function') {
+return Promise.reject(new Error('fetch unavailable'));
+}
+var options = { cache: 'no-store' };
+if (controller) {
+options.signal = controller.signal;
+}
+return new Promise(function (resolve, reject) {
+var settled = false;
+var timer = window.setTimeout(function () {
+settled = true;
+if (controller) {
+controller.abort();
+}
+reject(new Error('timeout'));
+}, ENV_TIMEOUT);
+window.fetch(url, options).then(function (response) {
+if (settled) {
+return;
+}
+settled = true;
+window.clearTimeout(timer);
+if (!response.ok) {
+reject(new Error('HTTP ' + response.status));
+return;
+}
+response.json().then(resolve, reject);
+}, function (error) {
+if (settled) {
+return;
+}
+settled = true;
+window.clearTimeout(timer);
+reject(error);
+});
+});
+}
+function applyPlace(data) {
+var name = formatPlaceName(data);
+if (!name) {
+return;
+}
+env.place = name;
+placeValueEl.textContent = name;
+placePill.setAttribute('aria-label', '当前地名：' + name);
+placePill.title = '地名：' + name + '（BigDataCloud / OpenStreetMap）';
+}
+function applyTemperature(data) {
+var temp = data && data.current ? data.current.temperature_2m : null;
+if (typeof temp !== 'number' || !isFinite(temp)) {
+return;
+}
+var rounded = Math.round(temp);
+env.temp = rounded;
+tempValueEl.textContent = rounded + '℃';
+tempPill.setAttribute('aria-label', '当地气温：' + rounded + ' 摄氏度');
+tempPill.title = '当地气温：' + rounded + '℃（Open-Meteo）';
+}
+function loadEnvironment(lat, lon) {
+if (typeof lat !== 'number' || !isFinite(lat) ||
+typeof lon !== 'number' || !isFinite(lon)) {
+return;
+}
+env.seq += 1;
+var seq = env.seq;
+if (env.controller) {
+env.controller.abort();
+}
+var controller = typeof window.AbortController === 'function'
+? new window.AbortController()
+: null;
+env.controller = controller;
+var latText = lat.toFixed(4);
+var lonText = lon.toFixed(4);
+var placeUrl = PLACE_API + '?latitude=' + latText + '&longitude=' + lonText +
+'&localityLanguage=zh-Hans';
+var weatherUrl = WEATHER_API + '?latitude=' + latText + '&longitude=' + lonText +
+'&current=temperature_2m&timezone=auto';
+var placePromise = fetchJson(placeUrl, controller);
+var weatherPromise = fetchJson(weatherUrl, controller);
+function applyPlaceResult(result) {
+if (result && result.status === 'fulfilled') {
+applyPlace(result.value);
+}
+}
+function applyWeatherResult(result) {
+if (result && result.status === 'fulfilled') {
+applyTemperature(result.value);
+}
+}
+if (typeof Promise.allSettled === 'function') {
+Promise.allSettled([placePromise, weatherPromise]).then(function (results) {
+if (seq !== env.seq) {
+return;
+}
+env.controller = null;
+applyPlaceResult(results[0]);
+applyWeatherResult(results[1]);
+});
+} else {
+placePromise.then(function (data) {
+if (seq === env.seq) {
+applyPlace(data);
+}
+}, function () {});
+weatherPromise.then(function (data) {
+if (seq === env.seq) {
+applyTemperature(data);
+}
+}, function () {});
+}
+}
+function formatDirection(deg) {
+if (typeof deg !== 'number' || !isFinite(deg)) {
+return '--';
+}
+var heading = ((deg % 360) + 360) % 360;
+var index = Math.round(heading / 45) % 8;
+var rounded = Math.round(heading) % 360;
+return DIRECTIONS[index] + ' ' + rounded + '°';
+}
+function renderCompass(stateName) {
+if (!compassPill || !compassValueEl) {
+return;
+}
+compass.state = stateName;
+compassPill.classList.remove('is-action', 'is-live', 'is-waiting', 'is-denied');
+compassPill.disabled = true;
+compassPill.removeAttribute('title');
+if (stateName === 'prompt') {
+compassValueEl.textContent = '点击开启指南针';
+compassPill.classList.add('is-action');
+compassPill.disabled = false;
+compassPill.setAttribute('aria-label', '点击开启指南针');
+compassPill.title = '点击授权使用方向传感器';
+} else if (stateName === 'denied') {
+compassValueEl.textContent = '指南针未授权';
+compassPill.classList.add('is-action', 'is-denied');
+compassPill.disabled = false;
+compassPill.setAttribute('aria-label', '指南针未授权，点击重试');
+compassPill.title = '请在系统设置中允许运动与方向访问';
+} else if (stateName === 'live') {
+var text = compass.heading === null ? '--' : formatDirection(compass.heading);
+compassValueEl.textContent = text;
+compassPill.classList.add('is-live');
+compassPill.setAttribute('aria-label', '指南针：' + text);
+compassPill.title = '指南针：' + text;
+compass.lastText = text;
+} else if (stateName === 'waiting') {
+compassValueEl.textContent = '校准中…';
+compassPill.classList.add('is-waiting');
+compassPill.setAttribute('aria-label', '指南针校准中');
+} else {
+compassValueEl.textContent = '不可用';
+compassPill.setAttribute('aria-label', '指南针不可用');
+compassPill.title = '当前设备没有可用的方向传感器';
+}
+}
+function startCompass() {
+if (!compass.supported || compass.listening) {
+return;
+}
+compass.listening = true;
+window.addEventListener('deviceorientationabsolute', onCompassEvent, true);
+window.addEventListener('deviceorientation', onCompassEvent, true);
+if (compass.timer !== null) {
+window.clearTimeout(compass.timer);
+}
+compass.timer = window.setTimeout(function () {
+compass.timer = null;
+if (compass.heading === null && compass.state !== 'denied') {
+renderCompass('unsupported');
+}
+}, COMPASS_TIMEOUT);
+if (compass.heading !== null) {
+renderCompass('live');
+} else {
+renderCompass('waiting');
+}
+}
+function stopCompass() {
+if (!compass.listening) {
+return;
+}
+compass.listening = false;
+window.removeEventListener('deviceorientationabsolute', onCompassEvent, true);
+window.removeEventListener('deviceorientation', onCompassEvent, true);
+if (compass.timer !== null) {
+window.clearTimeout(compass.timer);
+compass.timer = null;
+}
+}
+function onCompassEvent(event) {
+var heading = null;
+if (typeof event.webkitCompassHeading === 'number' && isFinite(event.webkitCompassHeading)) {
+heading = event.webkitCompassHeading;
+} else if (event.absolute && typeof event.alpha === 'number' && isFinite(event.alpha)) {
+heading = 360 - event.alpha;
+}
+if (heading === null) {
+return;
+}
+var now = Date.now();
+if (now - compass.lastAt < 80) {
+return;
+}
+compass.lastAt = now;
+heading = ((heading % 360) + 360) % 360;
+compass.heading = heading;
+if (compass.timer !== null) {
+window.clearTimeout(compass.timer);
+compass.timer = null;
+}
+if (compass.state !== 'live') {
+renderCompass('live');
+} else {
+var text = formatDirection(heading);
+if (text !== compass.lastText) {
+compass.lastText = text;
+compassValueEl.textContent = text;
+compassPill.setAttribute('aria-label', '指南针：' + text);
+compassPill.title = '指南针：' + text;
+}
+}
+}
+function requestCompassPermission() {
+if (!compass.supported) {
+renderCompass('unsupported');
+return;
+}
+if (typeof window.DeviceOrientationEvent.requestPermission !== 'function') {
+startCompass();
+return;
+}
+renderCompass('waiting');
+var request;
+try {
+request = window.DeviceOrientationEvent.requestPermission();
+} catch (err) {
+renderCompass('denied');
+return;
+}
+if (request && typeof request.then === 'function') {
+request.then(function (response) {
+if (response === 'granted') {
+compass.permission = 'granted';
+startCompass();
+} else {
+compass.permission = 'denied';
+renderCompass('denied');
+}
+}, function () {
+compass.permission = 'denied';
+renderCompass('denied');
+});
+} else {
+compass.permission = 'granted';
+startCompass();
+}
+}
+function initCompass() {
+if (!compassPill || !compassValueEl) {
+return;
+}
+if (!compass.supported) {
+renderCompass('unsupported');
+return;
+}
+compass.needsPermission = typeof window.DeviceOrientationEvent.requestPermission === 'function';
+if (compass.needsPermission) {
+renderCompass('prompt');
+return;
+}
+var mobile = (navigator.maxTouchPoints || 0) > 0 ||
+/Android|iPhone|iPad|iPod/i.test(navigator.userAgent || '');
+if (!mobile) {
+renderCompass('unsupported');
+return;
+}
+startCompass();
 }
 function pressureAt(meters) {
 var factor = 1 - 2.25577e-5 * meters;
@@ -1274,6 +1811,7 @@ addSample(altitude);
 }
 }
 renderAll('count');
+loadEnvironment(coords.latitude, coords.longitude);
 }
 function locate(fromUser) {
 if (busy) {
@@ -1317,6 +1855,16 @@ refreshBtn.addEventListener('click', function () {
 locate(true);
 });
 trackBtn.addEventListener('click', toggleTracking);
+if (compassPill) {
+compassPill.addEventListener('click', function () {
+if (compassPill.disabled) {
+return;
+}
+if (compass.state === 'prompt' || compass.state === 'denied') {
+requestCompassPermission();
+}
+});
+}
 segBtns.forEach(function (btn) {
 btn.addEventListener('click', function () {
 setUnit(btn.dataset.unit);
@@ -1354,19 +1902,25 @@ drawChart();
 });
 }
 document.addEventListener('visibilitychange', function () {
-if (!track.active) {
-return;
-}
 if (document.hidden) {
 stopSampling();
-} else {
+stopCompass();
+return;
+}
+if (track.active) {
 startSampling();
 sampleAltitude();
+}
+if (compass.state === 'live' || compass.state === 'waiting') {
+if (compass.permission === 'granted' || !compass.needsPermission) {
+startCompass();
+}
 }
 });
 loadStore();
 renderAll(false);
 syncThemeMeta();
+initCompass();
 if (window.matchMedia) {
 var schemeQuery = window.matchMedia('(prefers-color-scheme: light)');
 if (schemeQuery && typeof schemeQuery.addEventListener === 'function') {
