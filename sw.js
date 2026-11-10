@@ -2,7 +2,7 @@
  * 离线缓存（stale-while-revalidate）
  * 修改页面后请把 VERSION 加一，旧缓存会在下一次激活时自动清除。
  */
-var VERSION = 'altitude-v2';
+var VERSION = 'altitude-v3';
 var ROOT = self.registration.scope;
 var ROOT_PATH = new URL(ROOT).pathname;
 var INDEX_PATH = ROOT_PATH + 'index.html';

@@ -172,6 +172,48 @@ opacity: 0.5;
 fill: var(--accent);
 transition: fill 0.6s ease;
 }
+.header-actions {
+display: flex;
+align-items: center;
+gap: 9px;
+}
+.icon-btn {
+position: relative;
+flex: none;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+width: 36px;
+height: 36px;
+padding: 0;
+border: 1px solid var(--edge);
+border-radius: 50%;
+background-color: var(--surface);
+color: var(--muted);
+transition: color 0.2s ease, background-color 0.25s ease, border-color 0.25s ease,
+opacity 0.2s ease, transform 0.16s ease;
+}
+.icon-btn::after {
+content: "";
+position: absolute;
+inset: -5px;
+}
+.icon-btn svg {
+display: block;
+width: 17px;
+height: 17px;
+}
+.icon-btn:active {
+transform: scale(0.94);
+}
+.icon-btn:disabled {
+opacity: 0.45;
+cursor: default;
+transform: none;
+}
+.icon-btn.is-loading svg {
+animation: spin 0.9s linear infinite;
+}
 .segmented {
 position: relative;
 display: flex;
@@ -266,7 +308,7 @@ font-family: "DIN Alternate", "SF Pro Display", -apple-system, BlinkMacSystemFon
 "Helvetica Neue", Arial, sans-serif;
 font-size: calc(var(--val-size) * 0.17);
 font-weight: 700;
-color: var(--muted);
+color: var(--num-bottom);
 transform: translateX(0.08em);
 transition: opacity 0.25s ease, color 0.6s ease, font-size 0.35s ease;
 }
@@ -312,7 +354,7 @@ height: 30px;
 padding: 0 14px;
 border: 1px solid var(--edge);
 border-radius: 999px;
-background-color: transparent;
+background-color: var(--glass);
 font-size: 12.5px;
 font-weight: 600;
 letter-spacing: 0.02em;
@@ -338,6 +380,21 @@ transform: none;
 content: "";
 position: absolute;
 inset: -8px 0;
+}
+.chart-wrap {
+width: 100%;
+height: 68px;
+margin-top: 2px;
+animation: chart-in 0.32s ease both;
+}
+.chart-wrap canvas {
+display: block;
+width: 100%;
+height: 100%;
+}
+@keyframes chart-in {
+from { opacity: 0; transform: translateY(5px); }
+to { opacity: 1; transform: none; }
 }
 .status {
 margin: 0;
@@ -382,41 +439,9 @@ cursor: pointer;
 appearance: none;
 touch-action: manipulation;
 }
-.primary {
-position: relative;
-width: 100%;
-padding: 16px 20px;
-border: 1px solid rgba(255, 255, 255, 0.28);
-border-radius: 18px;
-font-size: 17px;
-font-weight: 700;
-letter-spacing: 0.04em;
-color: #04211c;
-background-image:
-linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 42%),
-linear-gradient(180deg, #7ff0dd 0%, #45dcc2 55%, #2bc2a8 100%);
-box-shadow:
-0 16px 34px -14px rgba(45, 212, 191, 0.7),
-0 2px 6px rgba(3, 10, 12, 0.18),
-inset 0 1px 0 rgba(255, 255, 255, 0.55);
-transition: transform 0.16s ease, opacity 0.2s ease, filter 0.2s ease,
-box-shadow 0.2s ease;
-}
-.primary:active {
-transform: scale(0.975);
-box-shadow:
-0 8px 18px -10px rgba(45, 212, 191, 0.7),
-inset 0 1px 0 rgba(255, 255, 255, 0.45);
-}
 button:focus-visible {
 outline: 2px solid var(--accent);
 outline-offset: 3px;
-}
-.primary:disabled {
-opacity: 0.55;
-filter: saturate(0.5);
-cursor: default;
-transform: none;
 }
 .panel {
 padding: 12px 15px;
@@ -435,6 +460,9 @@ display: flex;
 align-items: flex-start;
 justify-content: space-between;
 gap: 14px;
+}
+.stat-row {
+margin-top: 9px;
 }
 .stat {
 display: flex;
@@ -525,8 +553,8 @@ gap: 10px;
 .readout {
 --val-size: clamp(76px, 27vw, 190px);
 }
-.primary {
-padding: 14px 20px;
+.stat-row {
+margin-top: 7px;
 }
 .panel {
 padding: 10px 13px;
@@ -552,11 +580,15 @@ max-width: none;
 font-size: 12px;
 line-height: 1.4;
 }
+.chart-wrap {
+height: 46px;
+margin-top: 0;
+}
+.stat-row {
+margin-top: 6px;
+}
 .bottom {
 gap: 6px;
-}
-.primary {
-padding: 12px 20px;
 }
 .panel {
 padding: 8px 13px;
@@ -585,6 +617,9 @@ gap: 4px;
 }
 .readout {
 --val-size: clamp(46px, 18vh, 96px);
+}
+.chart-wrap {
+height: 38px;
 }
 .panel {
 padding: 7px 12px;
@@ -615,10 +650,18 @@ transition-duration: 0.001ms !important;
 </svg>
 <span>Altitude</span>
 </span>
+<div class="header-actions">
 <div class="segmented" id="unitToggle" data-active="m" role="group" aria-label="海拔单位">
 <span class="seg-thumb" aria-hidden="true"></span>
 <button type="button" class="seg is-active" data-unit="m" aria-pressed="true" aria-label="米">m</button>
 <button type="button" class="seg" data-unit="ft" aria-pressed="false" aria-label="英尺">ft</button>
+</div>
+<button class="icon-btn" id="refresh" type="button" aria-label="刷新海拔">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<polyline points="23 4 23 10 17 10"/>
+<path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+</svg>
+</button>
 </div>
 </header>
 <main>
@@ -633,10 +676,12 @@ transition-duration: 0.001ms !important;
 </div>
 <button class="track-btn" id="track" type="button" disabled>开始追踪</button>
 </div>
+<div class="chart-wrap" id="chartWrap" hidden>
+<canvas id="chart" role="img" aria-label="实时海拔趋势图"></canvas>
+</div>
 <p class="status" id="status" role="status" aria-live="polite"></p>
 </main>
 <div class="bottom">
-<button class="primary" id="refresh" type="button">刷新海拔</button>
 <section class="panel" aria-label="环境数据">
 <div class="panel-row">
 <div class="stat">
@@ -649,6 +694,16 @@ transition-duration: 0.001ms !important;
 <i class="status-dot" aria-hidden="true"></i>
 <span id="statusText" role="status" aria-live="polite">未定位</span>
 </span>
+</div>
+</div>
+<div class="panel-row stat-row">
+<div class="stat">
+<span class="stat-label">最高海拔</span>
+<span class="stat-value" id="altMax">--</span>
+</div>
+<div class="stat stat-right">
+<span class="stat-label">最低海拔</span>
+<span class="stat-value" id="altMin">--</span>
 </div>
 </div>
 <div class="coords-row">
@@ -666,8 +721,8 @@ transition-duration: 0.001ms !important;
 'use strict';
 var FT_PER_M = 3.28084;
 var STORE_KEY = 'altitudeTool.v1';
-var BUTTON_TEXT = '刷新海拔';
 var COUNT_DURATION = 520;
+var SAMPLE_INTERVAL = 15000;
 var SEA_LEVEL_PRESSURE = 1013.25;
 var ERROR_MESSAGES = {
 1: '定位权限被拒绝。请到浏览器或系统设置中允许访问位置，然后重试。',
@@ -695,6 +750,11 @@ var unitEl = document.getElementById('unit');
 var statusEl = document.getElementById('status');
 var statusTextEl = document.getElementById('statusText');
 var pressureEl = document.getElementById('pressure');
+var altMaxEl = document.getElementById('altMax');
+var altMinEl = document.getElementById('altMin');
+var chartWrap = document.getElementById('chartWrap');
+var chartCanvas = document.getElementById('chart');
+var chartCtx = chartCanvas && chartCanvas.getContext ? chartCanvas.getContext('2d') : null;
 var geoEl = document.getElementById('geo');
 var trackLabelEl = document.getElementById('trackLabel');
 var trackValueEl = document.getElementById('trackValue');
@@ -704,6 +764,7 @@ var unitToggle = document.getElementById('unitToggle');
 var themeMeta = document.querySelector('meta[name="theme-color"]');
 var segBtns = Array.prototype.slice.call(unitToggle.querySelectorAll('.seg'));
 var busy = false;
+var sampling = false;
 var state = {
 unit: 'm',
 status: 'idle',   // idle | loading | prompt | ok | warn | error
@@ -714,7 +775,13 @@ lon: null
 };
 var track = {
 active: false,
-start: null
+start: null,
+timer: null,
+samples: []
+};
+var stats = {
+min: null,
+max: null
 };
 var counter = {
 raf: null,
@@ -744,6 +811,23 @@ return state.unit === 'ft' ? meters * FT_PER_M : meters;
 }
 function unitSymbol() {
 return state.unit === 'ft' ? 'ft' : 'm';
+}
+function formatAltitude(meters) {
+if (typeof meters !== 'number' || !isFinite(meters)) {
+return '--';
+}
+return convert(meters).toFixed(1) + ' ' + unitSymbol();
+}
+function recordAltitude(meters) {
+if (typeof meters !== 'number' || !isFinite(meters)) {
+return;
+}
+if (stats.min === null || meters < stats.min) {
+stats.min = meters;
+}
+if (stats.max === null || meters > stats.max) {
+stats.max = meters;
+}
 }
 function formatCoords(lat, lon) {
 if (lat === null || lon === null) {
@@ -914,6 +998,8 @@ var hasAltitude = state.status === 'ok' && state.altitude !== null;
 var pressure = hasAltitude ? pressureAt(state.altitude) : null;
 pressureEl.textContent = pressure === null ? '--' : pressure.toFixed(1) + ' hPa';
 statusTextEl.textContent = STATUS_TEXT[state.status] || STATUS_TEXT.idle;
+altMaxEl.textContent = formatAltitude(stats.max);
+altMinEl.textContent = formatAltitude(stats.min);
 geoEl.textContent = formatCoords(state.lat, state.lon);
 }
 function renderUnitToggle() {
@@ -930,6 +1016,189 @@ renderUnitToggle();
 renderValue(mode);
 renderTracking();
 renderPanel();
+drawChart();
+}
+function drawChart() {
+if (!chartWrap || !chartCanvas || !chartCtx) {
+return;
+}
+if (chartWrap.hidden) {
+return;
+}
+var width = chartWrap.clientWidth;
+var height = chartWrap.clientHeight;
+if (width < 2 || height < 2) {
+return;
+}
+var dpr = Math.min(window.devicePixelRatio || 1, 2);
+var pixelWidth = Math.round(width * dpr);
+var pixelHeight = Math.round(height * dpr);
+if (chartCanvas.width !== pixelWidth || chartCanvas.height !== pixelHeight) {
+chartCanvas.width = pixelWidth;
+chartCanvas.height = pixelHeight;
+}
+var ctx = chartCtx;
+ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+ctx.clearRect(0, 0, width, height);
+var samples = track.samples;
+if (!samples.length) {
+return;
+}
+var styles = window.getComputedStyle(body);
+var accent = (styles.getPropertyValue('--accent') || '#5eead4').trim();
+var edge = (styles.getPropertyValue('--edge') || 'rgba(255,255,255,0.12)').trim();
+ctx.strokeStyle = edge;
+ctx.lineWidth = 1;
+ctx.beginPath();
+ctx.moveTo(0, height - 0.5);
+ctx.lineTo(width, height - 0.5);
+ctx.stroke();
+var min = samples[0].alt;
+var max = samples[0].alt;
+for (var i = 1; i < samples.length; i++) {
+if (samples[i].alt < min) {
+min = samples[i].alt;
+}
+if (samples[i].alt > max) {
+max = samples[i].alt;
+}
+}
+var padY = Math.max((max - min) * 0.18, 0.8);
+var lo = min - padY;
+var hi = max + padY;
+var top = 6;
+var bottom = height - 6;
+var left = 2;
+var right = width - 2;
+var firstTime = samples[0].t;
+var lastTime = samples[samples.length - 1].t;
+var duration = lastTime - firstTime;
+function xAt(index) {
+if (samples.length === 1) {
+return (left + right) / 2;
+}
+var ratio = duration > 0
+? (samples[index].t - firstTime) / duration
+: index / (samples.length - 1);
+return left + ratio * (right - left);
+}
+function yAt(value) {
+return bottom - ((value - lo) / (hi - lo)) * (bottom - top);
+}
+ctx.beginPath();
+for (var j = 0; j < samples.length; j++) {
+var x = xAt(j);
+var y = yAt(samples[j].alt);
+if (j === 0) {
+ctx.moveTo(x, y);
+} else {
+ctx.lineTo(x, y);
+}
+}
+var lastX = xAt(samples.length - 1);
+ctx.lineTo(lastX, height - 1);
+ctx.lineTo(xAt(0), height - 1);
+ctx.closePath();
+ctx.globalAlpha = 0.16;
+ctx.fillStyle = accent;
+ctx.fill();
+ctx.globalAlpha = 1;
+ctx.beginPath();
+for (var k = 0; k < samples.length; k++) {
+var lineX = xAt(k);
+var lineY = yAt(samples[k].alt);
+if (k === 0) {
+ctx.moveTo(lineX, lineY);
+} else {
+ctx.lineTo(lineX, lineY);
+}
+}
+ctx.strokeStyle = accent;
+ctx.lineWidth = 2;
+ctx.lineJoin = 'round';
+ctx.lineCap = 'round';
+ctx.stroke();
+ctx.beginPath();
+ctx.arc(lastX, yAt(samples[samples.length - 1].alt), 2.6, 0, Math.PI * 2);
+ctx.fillStyle = accent;
+ctx.fill();
+chartCanvas.setAttribute('aria-label',
+'实时海拔趋势图，共 ' + samples.length + ' 个采样点，最高 ' +
+formatAltitude(max) + '，最低 ' + formatAltitude(min));
+}
+function addSample(meters) {
+if (typeof meters !== 'number' || !isFinite(meters)) {
+return;
+}
+track.samples.push({ t: Date.now(), alt: meters });
+chartWrap.hidden = false;
+drawChart();
+}
+function startSampling() {
+stopSampling();
+if (!track.active) {
+return;
+}
+track.timer = window.setInterval(sampleAltitude, SAMPLE_INTERVAL);
+}
+function stopSampling() {
+if (track.timer !== null) {
+window.clearInterval(track.timer);
+track.timer = null;
+}
+}
+function sampleAltitude() {
+if (!track.active || sampling || busy || document.hidden) {
+return;
+}
+if (!('geolocation' in navigator)) {
+return;
+}
+sampling = true;
+navigator.geolocation.getCurrentPosition(
+function (position) {
+sampling = false;
+if (!track.active) {
+return;
+}
+applySample(position.coords);
+},
+function () {
+sampling = false;
+},
+{
+enableHighAccuracy: true,
+timeout: 12000,
+maximumAge: 5000
+}
+);
+}
+function applySample(coords) {
+var altitude = typeof coords.altitude === 'number' && isFinite(coords.altitude)
+? coords.altitude
+: null;
+if (altitude === null) {
+return;
+}
+state.altitude = altitude;
+state.accuracy = typeof coords.accuracy === 'number' && isFinite(coords.accuracy)
+? coords.accuracy
+: null;
+state.lat = coords.latitude;
+state.lon = coords.longitude;
+setStatus('ok');
+statusEl.textContent = '';
+applyZone(zoneFor(altitude));
+recordAltitude(altitude);
+addSample(altitude);
+renderAll(false);
+}
+function setRefreshBusy(isBusy) {
+busy = isBusy;
+refreshBtn.disabled = isBusy;
+refreshBtn.classList.toggle('is-loading', isBusy);
+refreshBtn.setAttribute('aria-busy', isBusy ? 'true' : 'false');
+refreshBtn.setAttribute('aria-label', isBusy ? '正在获取海拔' : '刷新海拔');
 }
 function setStatus(stateName) {
 state.status = stateName;
@@ -939,7 +1208,9 @@ function toggleTracking() {
 if (track.active) {
 track.active = false;
 track.start = null;
+stopSampling();
 renderTracking();
+drawChart();
 return;
 }
 if (state.status !== 'ok' || state.altitude === null) {
@@ -947,12 +1218,15 @@ return;
 }
 track.active = true;
 track.start = state.altitude;
+track.samples = [];
+addSample(state.altitude);
+startSampling();
 renderTracking();
+drawChart();
+sampleAltitude();
 }
 function showError(message) {
-busy = false;
-refreshBtn.disabled = false;
-refreshBtn.textContent = BUTTON_TEXT;
+setRefreshBusy(false);
 state.altitude = null;
 state.accuracy = null;
 state.lat = null;
@@ -963,16 +1237,14 @@ statusEl.textContent = message;
 renderAll(false);
 }
 function showPermissionHint() {
-busy = false;
-refreshBtn.disabled = false;
-refreshBtn.textContent = BUTTON_TEXT;
+setRefreshBusy(false);
 state.altitude = null;
 state.accuracy = null;
 state.lat = null;
 state.lon = null;
 setStatus('prompt');
 applyZone(null);
-statusEl.textContent = '请点击下方「刷新海拔」按钮，允许获取位置后即可显示海拔。';
+statusEl.textContent = '请点击右上角的刷新图标，允许获取位置后即可显示海拔。';
 renderAll(false);
 }
 function showSuccess(position) {
@@ -983,9 +1255,7 @@ var accuracy = typeof coords.accuracy === 'number' && isFinite(coords.accuracy)
 var altitude = typeof coords.altitude === 'number' && isFinite(coords.altitude)
 ? coords.altitude
 : null;
-busy = false;
-refreshBtn.disabled = false;
-refreshBtn.textContent = BUTTON_TEXT;
+setRefreshBusy(false);
 state.accuracy = accuracy;
 state.altitude = altitude;
 state.lat = coords.latitude;
@@ -998,6 +1268,10 @@ statusEl.textContent = '已定位成功，但当前设备未能提供海拔数�
 setStatus('ok');
 applyZone(zoneFor(altitude));
 statusEl.textContent = '';
+recordAltitude(altitude);
+if (track.active) {
+addSample(altitude);
+}
 }
 renderAll('count');
 }
@@ -1009,9 +1283,7 @@ if (!('geolocation' in navigator)) {
 showError('当前浏览器不支持定位功能，请更换浏览器后重试。');
 return;
 }
-busy = true;
-refreshBtn.disabled = true;
-refreshBtn.textContent = '定位中…';
+setRefreshBusy(true);
 setStatus('loading');
 statusEl.textContent = '正在获取海拔…';
 state.lat = null;
@@ -1052,11 +1324,21 @@ setUnit(btn.dataset.unit);
 });
 window.addEventListener('resize', function () {
 fitValue();
+drawChart();
 });
 window.addEventListener('orientationchange', function () {
-window.requestAnimationFrame(fitValue);
-window.setTimeout(fitValue, 120);
-window.setTimeout(fitValue, 280);
+window.requestAnimationFrame(function () {
+fitValue();
+drawChart();
+});
+window.setTimeout(function () {
+fitValue();
+drawChart();
+}, 120);
+window.setTimeout(function () {
+fitValue();
+drawChart();
+}, 280);
 });
 if (window.visualViewport && typeof window.visualViewport.addEventListener === 'function') {
 var viewportTimer = null;
@@ -1067,9 +1349,21 @@ window.clearTimeout(viewportTimer);
 viewportTimer = window.setTimeout(function () {
 viewportTimer = null;
 fitValue();
+drawChart();
 }, 80);
 });
 }
+document.addEventListener('visibilitychange', function () {
+if (!track.active) {
+return;
+}
+if (document.hidden) {
+stopSampling();
+} else {
+startSampling();
+sampleAltitude();
+}
+});
 loadStore();
 renderAll(false);
 syncThemeMeta();
