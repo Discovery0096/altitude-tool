@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0b1220">
-<link rel="icon" type="image/png" sizes="512x512" href="icon.png">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Cdefs%3E%3ClinearGradient%20id%3D%27b%27%20x1%3D%270%27%20y1%3D%270%27%20x2%3D%270%27%20y2%3D%271%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27%230d2536%27%2F%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%23050a10%27%2F%3E%3C%2FlinearGradient%3E%3ClinearGradient%20id%3D%27l%27%20x1%3D%270%27%20y1%3D%270%27%20x2%3D%270%27%20y2%3D%271%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27%23f4fafd%27%2F%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%23adc8d8%27%2F%3E%3C%2FlinearGradient%3E%3ClinearGradient%20id%3D%27s%27%20x1%3D%270%27%20y1%3D%270%27%20x2%3D%271%27%20y2%3D%271%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27%23a6c2d1%27%2F%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%234b697b%27%2F%3E%3C%2FlinearGradient%3E%3CradialGradient%20id%3D%27g%27%20gradientUnits%3D%27userSpaceOnUse%27%20cx%3D%2729%27%20cy%3D%2716%27%20r%3D%2746%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27%232dd4bf%27%20stop-opacity%3D%27.26%27%2F%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%232dd4bf%27%20stop-opacity%3D%270%27%2F%3E%3C%2FradialGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2714%27%20fill%3D%27url%28%23b%29%27%2F%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2714%27%20fill%3D%27url%28%23g%29%27%2F%3E%3Cpath%20d%3D%27M4.4%2064%2029.4%2018.9%2029.25%2064Z%27%20fill%3D%27url%28%23l%29%27%2F%3E%3Cpath%20d%3D%27M29.4%2018.9%2056.3%2064%2029.25%2064Z%27%20fill%3D%27url%28%23s%29%27%2F%3E%3Ccircle%20cx%3D%2729.4%27%20cy%3D%2718.4%27%20r%3D%271.6%27%20fill%3D%27%23a7f7e9%27%2F%3E%3Ccircle%20cx%3D%2729.4%27%20cy%3D%2718.4%27%20r%3D%27.7%27%20fill%3D%27%23fff%27%2F%3E%3C%2Fsvg%3E">
+<link rel="icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Cdefs%3E%3ClinearGradient%20id='b'%20x1='0'%20y1='0'%20x2='0'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%230d2536'/%3E%3Cstop%20offset='1'%20stop-color='%23050a10'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='url(%23b)'/%3E%3Cpath%20d='M4.4%2064%2029.4%2018.9%2029.25%2064Z'%20fill='%23f1f9fd'/%3E%3Cpath%20d='M29.4%2018.9%2056.3%2064%2029.25%2064Z'%20fill='%237d99aa'/%3E%3Ccircle%20cx='29.4'%20cy='18.4'%20r='1.6'%20fill='%23a7f7e9'/%3E%3Ccircle%20cx='29.4'%20cy='18.4'%20r='.7'%20fill='%23fff'/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,1106 +13,1081 @@
 <meta name="description" content="一个基于浏览器定位的极简海拔测量工具。">
 <title>海拔 · Altitude</title>
 <style>
-  /* 注册后数字渐变色才能随主题平滑过渡（不支持时自动降级为瞬时切换） */
-  @property --num-top {
-    syntax: "<color>";
-    inherits: true;
-    initial-value: #ffffff;
-  }
-
-  @property --num-bottom {
-    syntax: "<color>";
-    inherits: true;
-    initial-value: #c3cfdb;
-  }
-
-  * {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  html,
-  body {
-    height: 100%;
-  }
-
-  body {
-    /* 默认主题：未获取到海拔时，深色背景（浅色模式见下方媒体查询） */
-    --bg: #0b1220;
-    --fg: #f4f7fa;
-    --muted: #93a3b8;
-    --dim: #7d8da3;
-    --surface: rgba(255, 255, 255, 0.05);
-    --glass: rgba(255, 255, 255, 0.06);
-    --edge: rgba(255, 255, 255, 0.09);
-    --num-top: #ffffff;
-    --num-bottom: #c3cfdb;
-    --accent: #5eead4;
-    --pulse: rgba(94, 234, 212, 0.45);
-    --dot-idle: #39424f;
-    --dot-ok: #4ade80;
-    --dot-ok-glow: rgba(74, 222, 128, 0.55);
-    --dot-load: #ffd166;
-    --dot-err: #ff6b6b;
-    --error-fg: #ffb3b3;
-
-    margin: 0;
-    height: 100vh;
-    height: 100dvh;
-    padding: calc(env(safe-area-inset-top) + 16px) 20px calc(env(safe-area-inset-bottom) + 18px);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    overflow: hidden;
-    overscroll-behavior: none;
-    color: var(--fg);
-    background-color: var(--bg);
-    background-image: radial-gradient(120% 70% at 50% -10%,
-      rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0) 55%);
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
-      "Helvetica Neue", "Microsoft YaHei", Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -webkit-user-select: none;
-    user-select: none;
-    transition: background-color 0.9s ease, color 0.6s ease;
-  }
-
-  /* ---------- 海拔配色区间 ---------- */
-  body[data-zone="sea"] {
-    --bg: #0f172a;
-  }
-
-  body[data-zone="forest"] {
-    --bg: #064e3b;
-    --muted: #a9d9c8;
-    --dim: #90c2b1;
-    --surface: rgba(255, 255, 255, 0.06);
-    --glass: rgba(255, 255, 255, 0.07);
-    --edge: rgba(255, 255, 255, 0.13);
-  }
-
-  body[data-zone="rock"] {
-    --bg: #334155;
-    --muted: #c4d1e0;
-    --dim: #a7b5c7;
-    --surface: rgba(255, 255, 255, 0.06);
-    --glass: rgba(255, 255, 255, 0.07);
-    --edge: rgba(255, 255, 255, 0.13);
-  }
-
-  body[data-zone="snow"] {
-    --bg: #e2e8f0;
-    --fg: #0b1220;
-    --muted: #47566b;
-    --dim: #5b6b80;
-    --surface: rgba(15, 23, 42, 0.05);
-    --glass: rgba(255, 255, 255, 0.62);
-    --edge: rgba(15, 23, 42, 0.12);
-    --num-top: #0b1220;
-    --num-bottom: #33415a;
-    --accent: #0f766e;
-    --pulse: rgba(15, 118, 110, 0.35);
-    --dot-idle: #94a3b8;
-    --dot-ok: #16a34a;
-    --dot-ok-glow: rgba(22, 163, 74, 0.45);
-    --dot-load: #d97706;
-    --dot-err: #dc2626;
-    --error-fg: #b91c1c;
-  }
-
-  /* ---------- 系统浅色模式（仅在未获取到海拔时生效） ---------- */
-  @media (prefers-color-scheme: light) {
-    body:not([data-zone]) {
-      --bg: #eef2f7;
-      --fg: #0b1220;
-      --muted: #47566b;
-      --dim: #5b6b80;
-      --surface: rgba(15, 23, 42, 0.05);
-      --glass: rgba(255, 255, 255, 0.62);
-      --edge: rgba(15, 23, 42, 0.12);
-      --num-top: #0b1220;
-      --num-bottom: #33415a;
-      --accent: #0f766e;
-      --pulse: rgba(15, 118, 110, 0.35);
-      --dot-idle: #94a3b8;
-      --dot-ok: #16a34a;
-      --dot-ok-glow: rgba(22, 163, 74, 0.45);
-      --dot-load: #d97706;
-      --dot-err: #dc2626;
-      --error-fg: #b91c1c;
-    }
-  }
-
-  /* ---------- 顶栏 ---------- */
-  .topbar {
-    flex: none;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    font-size: 11.5px;
-    font-weight: 600;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--muted);
-    transition: color 0.6s ease;
-  }
-
-  .brand-mark {
-    flex: none;
-    width: 17px;
-    height: 17px;
-    display: block;
-    color: var(--fg);
-    transition: color 0.6s ease;
-  }
-
-  .brand-mark .face-lit {
-    fill: currentColor;
-  }
-
-  .brand-mark .face-shade {
-    fill: currentColor;
-    opacity: 0.5;
-  }
-
-  .brand-mark .beacon {
-    fill: var(--accent);
-    transition: fill 0.6s ease;
-  }
-
-  .segmented {
-    position: relative;
-    display: flex;
-    padding: 3px;
-    border-radius: 12px;
-    background-color: var(--surface);
-    border: 1px solid var(--edge);
-    transition: background-color 0.6s ease, border-color 0.6s ease;
-  }
-
-  .seg-thumb {
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 42px;
-    height: 26px;
-    border-radius: 9px;
-    background-image: linear-gradient(180deg, #9df6e8 0%, #45dcc2 100%);
-    box-shadow: 0 4px 10px -4px rgba(45, 212, 191, 0.55);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .segmented[data-active="ft"] .seg-thumb {
-    transform: translateX(42px);
-  }
-
-  .seg {
-    position: relative;
-    z-index: 1;
-    width: 42px;
-    height: 26px;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    font-family: inherit;
-    font-size: 12.5px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    color: var(--muted);
-    transition: color 0.4s ease;
-  }
-
-  .seg.is-active {
-    color: #04211c;
-  }
-
-  /* ---------- 主读数 ---------- */
-  main {
-    flex: 1 1 auto;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 14px;
-    text-align: center;
-  }
-
-  .readout {
-    --val-size: clamp(90px, 33vw, 240px);
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
-    max-width: 100%;
-    line-height: 1;
-  }
-
-  .value {
-    flex: none;
-    font-family: "DIN Alternate", "DIN Condensed", "SF Pro Display", -apple-system,
-      BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Arial, sans-serif;
-    font-size: var(--val-size);
-    font-weight: 700;
-    line-height: 0.86;
-    letter-spacing: -0.045em;
-    white-space: nowrap;
-    font-variant-numeric: tabular-nums;
-    font-feature-settings: "tnum" 1;
-    background-image: linear-gradient(180deg, var(--num-top) 0%, var(--num-bottom) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    transition: opacity 0.3s ease, font-size 0.35s ease,
-      --num-top 0.9s ease, --num-bottom 0.9s ease;
-  }
-
-  body[data-state="loading"] .value,
-  body[data-state="error"] .value {
-    opacity: 0.45;
-  }
-
-  /* 测量字号时临时关闭过渡，避免读到动画中间值 */
-  .value.is-measuring {
-    transition: none;
-  }
-
-  .unit {
-    font-family: "DIN Alternate", "SF Pro Display", -apple-system, BlinkMacSystemFont,
-      "Helvetica Neue", Arial, sans-serif;
-    font-size: calc(var(--val-size) * 0.17);
-    font-weight: 700;
-    color: var(--muted);
-    transform: translateX(0.08em);
-    transition: opacity 0.25s ease, color 0.6s ease, font-size 0.35s ease;
-  }
-
-  .unit.is-hidden {
-    opacity: 0;
-  }
-
-  /* ---------- 爬升追踪 ---------- */
-  .track-row {
-    width: 100%;
-    max-width: 19em;
-    min-height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  }
-
-  .track-info {
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-    min-width: 0;
-  }
-
-  .track-label {
-    font-size: 11.5px;
-    color: var(--muted);
-    white-space: nowrap;
-    transition: color 0.6s ease;
-  }
-
-  .track-value {
-    font-family: "DIN Alternate", "SF Pro Display", -apple-system, BlinkMacSystemFont,
-      "Helvetica Neue", Arial, sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--accent);
-    white-space: nowrap;
-    font-variant-numeric: tabular-nums;
-    transition: color 0.5s ease;
-  }
-
-  .track-btn {
-    flex: none;
-    height: 26px;
-    padding: 0 13px;
-    border: 1px solid var(--edge);
-    border-radius: 999px;
-    background-color: transparent;
-    font-size: 11.5px;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    color: var(--muted);
-    transition: color 0.25s ease, border-color 0.25s ease, background-color 0.25s ease,
-      opacity 0.2s ease, transform 0.16s ease;
-  }
-
-  .track-btn.is-active {
-    color: #04211c;
-    border-color: transparent;
-    background-image: linear-gradient(180deg, #9df6e8 0%, #45dcc2 100%);
-    box-shadow: 0 6px 14px -8px rgba(45, 212, 191, 0.7);
-  }
-
-  .track-btn:active {
-    transform: scale(0.96);
-  }
-
-  .track-btn:disabled {
-    opacity: 0.4;
-    cursor: default;
-    transform: none;
-  }
-
-  .status {
-    margin: 0;
-    max-width: 20em;
-    font-size: 12.5px;
-    line-height: 1.5;
-    color: var(--muted);
-    transition: color 0.4s ease;
-  }
-
-  .status:empty {
-    display: none;
-  }
-
-  body[data-state="error"] .status {
-    color: var(--error-fg);
-  }
-
-  /* ---------- 底部 ---------- */
-  .bottom {
-    flex: none;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  button {
-    font-family: inherit;
-    border: 0;
-    cursor: pointer;
-    -webkit-appearance: none;
-    appearance: none;
-  }
-
-  .primary {
-    position: relative;
-    width: 100%;
-    padding: 16px 20px;
-    border: 1px solid rgba(255, 255, 255, 0.28);
-    border-radius: 18px;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    color: #04211c;
-    background-image:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 42%),
-      linear-gradient(180deg, #7ff0dd 0%, #45dcc2 55%, #2bc2a8 100%);
-    box-shadow:
-      0 16px 34px -14px rgba(45, 212, 191, 0.7),
-      0 2px 6px rgba(3, 10, 12, 0.18),
-      inset 0 1px 0 rgba(255, 255, 255, 0.55);
-    transition: transform 0.16s ease, opacity 0.2s ease, filter 0.2s ease,
-      box-shadow 0.2s ease;
-  }
-
-  .primary:active {
-    transform: scale(0.975);
-    box-shadow:
-      0 8px 18px -10px rgba(45, 212, 191, 0.7),
-      inset 0 1px 0 rgba(255, 255, 255, 0.45);
-  }
-
-  button:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
-  }
-
-  .primary:disabled {
-    opacity: 0.55;
-    filter: saturate(0.5);
-    cursor: default;
-    transform: none;
-  }
-
-  /* ---------- 数据面板 ---------- */
-  .panel {
-    padding: 12px 15px;
-    border: 1px solid var(--edge);
-    border-radius: 22px;
-    background-color: var(--glass);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-    backdrop-filter: blur(20px) saturate(160%);
-    box-shadow:
-      0 22px 44px -30px rgba(0, 0, 0, 0.7),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    transition: background-color 0.6s ease, border-color 0.6s ease;
-  }
-
-  .panel-row {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 14px;
-  }
-
-  .stat {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
-  }
-
-  .stat-right {
-    align-items: flex-end;
-    text-align: right;
-  }
-
-  .stat-label {
-    font-size: 9.5px;
-    letter-spacing: 0.14em;
-    color: var(--muted);
-    transition: color 0.6s ease;
-  }
-
-  .stat-value {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13.5px;
-    font-weight: 600;
-    line-height: 1.35;
-    white-space: nowrap;
-    font-variant-numeric: tabular-nums;
-    transition: color 0.6s ease;
-  }
-
-  .status-dot {
-    flex: none;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background-color: var(--dot-idle);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  body[data-state="loading"] .status-dot {
-    background-color: var(--dot-load);
-    animation: pulse 1.2s ease-out infinite;
-  }
-  body[data-state="ok"] .status-dot,
-  body[data-state="warn"] .status-dot {
-    background-color: var(--dot-ok);
-    box-shadow: 0 0 8px var(--dot-ok-glow);
-  }
-  body[data-state="error"] .status-dot {
-    background-color: var(--dot-err);
-  }
-
-  @keyframes pulse {
-    0%   { box-shadow: 0 0 0 0 var(--pulse); }
-    70%  { box-shadow: 0 0 0 8px rgba(0, 0, 0, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
-  }
-
-  .coords-row {
-    margin-top: 10px;
-    padding-top: 9px;
-    border-top: 1px solid var(--edge);
-    text-align: center;
-    transition: border-color 0.6s ease;
-  }
-
-  .coords {
-    display: block;
-    font-size: 11.5px;
-    letter-spacing: 0.04em;
-    line-height: 1.4;
-    color: var(--dim);
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    transition: color 0.6s ease;
-  }
-
-  /* ---------- 矮屏适配 ---------- */
-  @media (max-height: 700px) {
-    body {
-      gap: 8px;
-      padding-top: calc(env(safe-area-inset-top) + 12px);
-      padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
-    }
-    main {
-      gap: 10px;
-    }
-    .readout {
-      --val-size: clamp(76px, 27vw, 190px);
-    }
-    .primary {
-      padding: 14px 20px;
-    }
-    .panel {
-      padding: 10px 13px;
-    }
-  }
-
-  /* ---------- 无障碍：减少动效 ---------- */
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.001ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.001ms !important;
-    }
-  }
+@property --num-top {
+syntax: "<color>";
+inherits: true;
+initial-value: #ffffff;
+}
+@property --num-bottom {
+syntax: "<color>";
+inherits: true;
+initial-value: #c3cfdb;
+}
+* {
+box-sizing: border-box;
+-webkit-tap-highlight-color: transparent;
+}
+html,
+body {
+height: 100%;
+}
+html {
+-webkit-text-size-adjust: 100%;
+text-size-adjust: 100%;
+}
+body {
+--bg: #0b1220;
+--fg: #f4f7fa;
+--muted: #93a3b8;
+--dim: #7d8da3;
+--surface: rgba(255, 255, 255, 0.05);
+--glass: rgba(255, 255, 255, 0.06);
+--edge: rgba(255, 255, 255, 0.09);
+--num-top: #ffffff;
+--num-bottom: #c3cfdb;
+--accent: #5eead4;
+--pulse: rgba(94, 234, 212, 0.45);
+--dot-idle: #39424f;
+--dot-ok: #4ade80;
+--dot-ok-glow: rgba(74, 222, 128, 0.55);
+--dot-load: #ffd166;
+--dot-err: #ff6b6b;
+--error-fg: #ffb3b3;
+margin: 0;
+height: 100vh;
+height: 100dvh;
+padding:
+calc(env(safe-area-inset-top) + 16px)
+calc(env(safe-area-inset-right) + 20px)
+calc(env(safe-area-inset-bottom) + 18px)
+calc(env(safe-area-inset-left) + 20px);
+display: flex;
+flex-direction: column;
+gap: 12px;
+overflow: hidden;
+overscroll-behavior: none;
+color: var(--fg);
+background-color: var(--bg);
+background-image: radial-gradient(120% 70% at 50% -10%,
+rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0) 55%);
+font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
+"Helvetica Neue", "Microsoft YaHei", Arial, sans-serif;
+-webkit-font-smoothing: antialiased;
+-webkit-user-select: none;
+user-select: none;
+transition: background-color 0.9s ease, color 0.6s ease;
+}
+body[data-zone="sea"] {
+--bg: #0f172a;
+}
+body[data-zone="forest"] {
+--bg: #064e3b;
+--muted: #a9d9c8;
+--dim: #90c2b1;
+--surface: rgba(255, 255, 255, 0.06);
+--glass: rgba(255, 255, 255, 0.07);
+--edge: rgba(255, 255, 255, 0.13);
+}
+body[data-zone="rock"] {
+--bg: #334155;
+--muted: #c4d1e0;
+--dim: #a7b5c7;
+--surface: rgba(255, 255, 255, 0.06);
+--glass: rgba(255, 255, 255, 0.07);
+--edge: rgba(255, 255, 255, 0.13);
+}
+body[data-zone="snow"] {
+--bg: #e2e8f0;
+--fg: #0b1220;
+--muted: #47566b;
+--dim: #5b6b80;
+--surface: rgba(15, 23, 42, 0.05);
+--glass: rgba(255, 255, 255, 0.62);
+--edge: rgba(15, 23, 42, 0.12);
+--num-top: #0b1220;
+--num-bottom: #33415a;
+--accent: #0f766e;
+--pulse: rgba(15, 118, 110, 0.35);
+--dot-idle: #94a3b8;
+--dot-ok: #16a34a;
+--dot-ok-glow: rgba(22, 163, 74, 0.45);
+--dot-load: #d97706;
+--dot-err: #dc2626;
+--error-fg: #b91c1c;
+}
+@media (prefers-color-scheme: light) {
+body:not([data-zone]) {
+--bg: #eef2f7;
+--fg: #0b1220;
+--muted: #47566b;
+--dim: #5b6b80;
+--surface: rgba(15, 23, 42, 0.05);
+--glass: rgba(255, 255, 255, 0.62);
+--edge: rgba(15, 23, 42, 0.12);
+--num-top: #0b1220;
+--num-bottom: #33415a;
+--accent: #0f766e;
+--pulse: rgba(15, 118, 110, 0.35);
+--dot-idle: #94a3b8;
+--dot-ok: #16a34a;
+--dot-ok-glow: rgba(22, 163, 74, 0.45);
+--dot-load: #d97706;
+--dot-err: #dc2626;
+--error-fg: #b91c1c;
+}
+}
+.topbar {
+flex: none;
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+.brand {
+display: flex;
+align-items: center;
+gap: 9px;
+font-size: 12.5px;
+font-weight: 600;
+letter-spacing: 0.24em;
+text-transform: uppercase;
+color: var(--muted);
+transition: color 0.6s ease;
+}
+.brand-mark {
+flex: none;
+width: 17px;
+height: 17px;
+display: block;
+color: var(--fg);
+transition: color 0.6s ease;
+}
+.brand-mark .face-lit {
+fill: currentColor;
+}
+.brand-mark .face-shade {
+fill: currentColor;
+opacity: 0.5;
+}
+.brand-mark .beacon {
+fill: var(--accent);
+transition: fill 0.6s ease;
+}
+.segmented {
+position: relative;
+display: flex;
+padding: 4px;
+border-radius: 12px;
+background-color: var(--surface);
+border: 1px solid var(--edge);
+transition: background-color 0.6s ease, border-color 0.6s ease;
+}
+.seg-thumb {
+position: absolute;
+top: 4px;
+left: 4px;
+width: 44px;
+height: 30px;
+border-radius: 10px;
+background-image: linear-gradient(180deg, #9df6e8 0%, #45dcc2 100%);
+box-shadow: 0 4px 10px -4px rgba(45, 212, 191, 0.55);
+transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.segmented[data-active="ft"] .seg-thumb {
+transform: translateX(44px);
+}
+.seg {
+position: relative;
+z-index: 1;
+width: 44px;
+height: 30px;
+padding: 0;
+border: 0;
+background: transparent;
+font-family: inherit;
+font-size: 13px;
+font-weight: 700;
+letter-spacing: 0.02em;
+color: var(--muted);
+transition: color 0.4s ease;
+}
+.seg.is-active {
+color: #04211c;
+}
+.seg::after {
+content: "";
+position: absolute;
+inset: -7px 0;
+}
+main {
+flex: 1 1 auto;
+min-height: 0;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 14px;
+text-align: center;
+}
+.readout {
+--val-size: clamp(96px, 34vw, 250px);
+display: flex;
+align-items: baseline;
+justify-content: center;
+max-width: 100%;
+line-height: 1;
+}
+.value {
+flex: none;
+font-family: "DIN Alternate", "DIN Condensed", "SF Pro Display", -apple-system,
+BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Arial, sans-serif;
+font-size: var(--val-size);
+font-weight: 700;
+line-height: 0.86;
+letter-spacing: -0.045em;
+white-space: nowrap;
+font-variant-numeric: tabular-nums;
+font-feature-settings: "tnum" 1;
+background-image: linear-gradient(180deg, var(--num-top) 0%, var(--num-bottom) 100%);
+-webkit-background-clip: text;
+background-clip: text;
+color: transparent;
+transition: opacity 0.3s ease, font-size 0.35s ease,
+--num-top 0.9s ease, --num-bottom 0.9s ease;
+}
+body[data-state="loading"] .value,
+body[data-state="error"] .value {
+opacity: 0.45;
+}
+.value.is-measuring {
+transition: none;
+}
+.unit {
+font-family: "DIN Alternate", "SF Pro Display", -apple-system, BlinkMacSystemFont,
+"Helvetica Neue", Arial, sans-serif;
+font-size: calc(var(--val-size) * 0.17);
+font-weight: 700;
+color: var(--muted);
+transform: translateX(0.08em);
+transition: opacity 0.25s ease, color 0.6s ease, font-size 0.35s ease;
+}
+.unit.is-hidden {
+opacity: 0;
+}
+.track-row {
+width: 100%;
+max-width: 19em;
+min-height: 32px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 12px;
+}
+.track-info {
+display: flex;
+align-items: baseline;
+gap: 6px;
+min-width: 0;
+}
+.track-label {
+font-size: 12.5px;
+color: var(--muted);
+white-space: nowrap;
+transition: color 0.6s ease;
+}
+.track-value {
+font-family: "DIN Alternate", "SF Pro Display", -apple-system, BlinkMacSystemFont,
+"Helvetica Neue", Arial, sans-serif;
+font-size: 16px;
+font-weight: 700;
+color: var(--accent);
+white-space: nowrap;
+font-variant-numeric: tabular-nums;
+transition: color 0.5s ease;
+}
+.track-btn {
+position: relative;
+flex: none;
+min-width: 88px;
+height: 30px;
+padding: 0 14px;
+border: 1px solid var(--edge);
+border-radius: 999px;
+background-color: transparent;
+font-size: 12.5px;
+font-weight: 600;
+letter-spacing: 0.02em;
+color: var(--muted);
+transition: color 0.25s ease, border-color 0.25s ease, background-color 0.25s ease,
+opacity 0.2s ease, transform 0.16s ease;
+}
+.track-btn.is-active {
+color: #04211c;
+border-color: transparent;
+background-image: linear-gradient(180deg, #9df6e8 0%, #45dcc2 100%);
+box-shadow: 0 6px 14px -8px rgba(45, 212, 191, 0.7);
+}
+.track-btn:active {
+transform: scale(0.96);
+}
+.track-btn:disabled {
+opacity: 0.4;
+cursor: default;
+transform: none;
+}
+.track-btn::after {
+content: "";
+position: absolute;
+inset: -8px 0;
+}
+.status {
+margin: 0;
+max-width: 20em;
+font-size: 13.5px;
+line-height: 1.5;
+color: var(--muted);
+transition: color 0.4s ease;
+}
+.status:empty {
+display: none;
+}
+body[data-state="error"] .status {
+color: var(--error-fg);
+}
+body[data-state="loading"] .status {
+display: flex;
+align-items: center;
+gap: 7px;
+}
+body[data-state="loading"] .status::before {
+content: "";
+flex: none;
+width: 13px;
+height: 13px;
+border: 2px solid var(--edge);
+border-top-color: var(--accent);
+border-radius: 50%;
+animation: spin 0.8s linear infinite;
+}
+.bottom {
+flex: none;
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+button {
+font-family: inherit;
+border: 0;
+cursor: pointer;
+-webkit-appearance: none;
+appearance: none;
+touch-action: manipulation;
+}
+.primary {
+position: relative;
+width: 100%;
+padding: 16px 20px;
+border: 1px solid rgba(255, 255, 255, 0.28);
+border-radius: 18px;
+font-size: 17px;
+font-weight: 700;
+letter-spacing: 0.04em;
+color: #04211c;
+background-image:
+linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 42%),
+linear-gradient(180deg, #7ff0dd 0%, #45dcc2 55%, #2bc2a8 100%);
+box-shadow:
+0 16px 34px -14px rgba(45, 212, 191, 0.7),
+0 2px 6px rgba(3, 10, 12, 0.18),
+inset 0 1px 0 rgba(255, 255, 255, 0.55);
+transition: transform 0.16s ease, opacity 0.2s ease, filter 0.2s ease,
+box-shadow 0.2s ease;
+}
+.primary:active {
+transform: scale(0.975);
+box-shadow:
+0 8px 18px -10px rgba(45, 212, 191, 0.7),
+inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+button:focus-visible {
+outline: 2px solid var(--accent);
+outline-offset: 3px;
+}
+.primary:disabled {
+opacity: 0.55;
+filter: saturate(0.5);
+cursor: default;
+transform: none;
+}
+.panel {
+padding: 12px 15px;
+border: 1px solid var(--edge);
+border-radius: 22px;
+background-color: var(--glass);
+-webkit-backdrop-filter: blur(12px);
+backdrop-filter: blur(12px);
+box-shadow:
+0 22px 44px -30px rgba(0, 0, 0, 0.7),
+inset 0 1px 0 rgba(255, 255, 255, 0.1);
+transition: background-color 0.6s ease, border-color 0.6s ease;
+}
+.panel-row {
+display: flex;
+align-items: flex-start;
+justify-content: space-between;
+gap: 14px;
+}
+.stat {
+display: flex;
+flex-direction: column;
+gap: 2px;
+min-width: 0;
+}
+.stat-right {
+align-items: flex-end;
+text-align: right;
+}
+.stat-label {
+font-size: 11px;
+letter-spacing: 0.1em;
+color: var(--muted);
+transition: color 0.6s ease;
+}
+.stat-value {
+display: flex;
+align-items: center;
+gap: 6px;
+font-size: 15px;
+font-weight: 600;
+line-height: 1.35;
+white-space: nowrap;
+font-variant-numeric: tabular-nums;
+transition: color 0.6s ease;
+}
+.status-dot {
+flex: none;
+width: 6px;
+height: 6px;
+border-radius: 50%;
+background-color: var(--dot-idle);
+transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+body[data-state="loading"] .status-dot {
+background-color: var(--dot-load);
+animation: pulse 1.2s ease-out infinite;
+}
+body[data-state="ok"] .status-dot,
+body[data-state="warn"] .status-dot {
+background-color: var(--dot-ok);
+box-shadow: 0 0 8px var(--dot-ok-glow);
+}
+body[data-state="error"] .status-dot {
+background-color: var(--dot-err);
+}
+body[data-state="prompt"] .status-dot {
+background-color: var(--dot-load);
+}
+@keyframes pulse {
+0%   { box-shadow: 0 0 0 0 var(--pulse); }
+70%  { box-shadow: 0 0 0 8px rgba(0, 0, 0, 0); }
+100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
+}
+@keyframes spin {
+to { transform: rotate(360deg); }
+}
+.coords-row {
+margin-top: 10px;
+padding-top: 9px;
+border-top: 1px solid var(--edge);
+text-align: center;
+transition: border-color 0.6s ease;
+}
+.coords {
+display: block;
+font-size: 12.5px;
+letter-spacing: 0.04em;
+line-height: 1.4;
+color: var(--dim);
+font-variant-numeric: tabular-nums;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+transition: color 0.6s ease;
+}
+@media (max-height: 700px) {
+body {
+gap: 8px;
+padding-top: calc(env(safe-area-inset-top) + 12px);
+padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
+}
+main {
+gap: 10px;
+}
+.readout {
+--val-size: clamp(76px, 27vw, 190px);
+}
+.primary {
+padding: 14px 20px;
+}
+.panel {
+padding: 10px 13px;
+}
+}
+@media (orientation: landscape) and (max-height: 500px) {
+body {
+gap: 6px;
+padding-top: calc(env(safe-area-inset-top) + 8px);
+padding-bottom: calc(env(safe-area-inset-bottom) + 8px);
+}
+.brand {
+font-size: 12px;
+}
+main {
+gap: 6px;
+}
+.readout {
+--val-size: clamp(52px, 20vh, 110px);
+}
+.status {
+max-width: none;
+font-size: 12px;
+line-height: 1.4;
+}
+.bottom {
+gap: 6px;
+}
+.primary {
+padding: 12px 20px;
+}
+.panel {
+padding: 8px 13px;
+border-radius: 18px;
+}
+.panel-row {
+align-items: center;
+}
+.stat-label {
+font-size: 10.5px;
+}
+.stat-value {
+font-size: 14px;
+}
+.coords-row {
+margin-top: 6px;
+padding-top: 6px;
+}
+.coords {
+font-size: 12px;
+}
+}
+@media (orientation: landscape) and (max-height: 360px) {
+main {
+gap: 4px;
+}
+.readout {
+--val-size: clamp(46px, 18vh, 96px);
+}
+.panel {
+padding: 7px 12px;
+}
+.coords-row {
+margin-top: 5px;
+padding-top: 5px;
+}
+}
+@media (prefers-reduced-motion: reduce) {
+*,
+*::before,
+*::after {
+animation-duration: 0.001ms !important;
+animation-iteration-count: 1 !important;
+transition-duration: 0.001ms !important;
+}
+}
 </style>
 </head>
 <body data-state="idle">
-
-  <header class="topbar">
-    <span class="brand">
-      <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <path class="face-lit" d="M1.7 24 11 7.2 10.9 24Z"/>
-        <path class="face-shade" d="M11 7.2 21.2 24H10.9Z"/>
-        <circle class="beacon" cx="11" cy="6.6" r="1.7"/>
-      </svg>
-      <span>Altitude</span>
-    </span>
-    <div class="segmented" id="unitToggle" data-active="m" role="group" aria-label="海拔单位">
-      <span class="seg-thumb" aria-hidden="true"></span>
-      <button type="button" class="seg is-active" data-unit="m" aria-pressed="true" aria-label="米">m</button>
-      <button type="button" class="seg" data-unit="ft" aria-pressed="false" aria-label="英尺">ft</button>
-    </div>
-  </header>
-
-  <main>
-    <div class="readout" id="readout" aria-hidden="true">
-      <span class="value" id="value">--</span>
-      <span class="unit is-hidden" id="unit">m</span>
-    </div>
-
-    <div class="track-row">
-      <div class="track-info">
-        <span class="track-label" id="trackLabel">尚未开始追踪</span>
-        <span class="track-value" id="trackValue"></span>
-      </div>
-      <button class="track-btn" id="track" type="button" disabled>开始追踪</button>
-    </div>
-
-    <p class="status" id="status" role="status" aria-live="polite"></p>
-  </main>
-
-  <div class="bottom">
-    <button class="primary" id="refresh" type="button">刷新海拔</button>
-
-    <section class="panel" aria-label="环境数据">
-      <div class="panel-row">
-        <div class="stat">
-          <span class="stat-label">气压</span>
-          <span class="stat-value" id="pressure">--</span>
-        </div>
-        <div class="stat stat-right">
-          <span class="stat-label">定位</span>
-          <span class="stat-value">
-            <i class="status-dot" aria-hidden="true"></i>
-            <span id="statusText" role="status" aria-live="polite">未定位</span>
-          </span>
-        </div>
-      </div>
-      <div class="coords-row">
-        <span class="coords" id="geo">—</span>
-      </div>
-    </section>
-  </div>
-
-  <noscript>
-    <p style="position:fixed;inset:0;margin:0;display:grid;place-items:center;background:#0b1220;color:#f4f7fa;font-size:16px;">
-      需要启用 JavaScript 才能使用海拔工具。
-    </p>
-  </noscript>
-
+<header class="topbar">
+<span class="brand">
+<svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+<path class="face-lit" d="M1.7 24 11 7.2 10.9 24Z"/>
+<path class="face-shade" d="M11 7.2 21.2 24H10.9Z"/>
+<circle class="beacon" cx="11" cy="6.6" r="1.7"/>
+</svg>
+<span>Altitude</span>
+</span>
+<div class="segmented" id="unitToggle" data-active="m" role="group" aria-label="海拔单位">
+<span class="seg-thumb" aria-hidden="true"></span>
+<button type="button" class="seg is-active" data-unit="m" aria-pressed="true" aria-label="米">m</button>
+<button type="button" class="seg" data-unit="ft" aria-pressed="false" aria-label="英尺">ft</button>
+</div>
+</header>
+<main>
+<div class="readout" id="readout" aria-hidden="true">
+<span class="value" id="value">--</span>
+<span class="unit is-hidden" id="unit">m</span>
+</div>
+<div class="track-row">
+<div class="track-info">
+<span class="track-label" id="trackLabel">尚未开始追踪</span>
+<span class="track-value" id="trackValue"></span>
+</div>
+<button class="track-btn" id="track" type="button" disabled>开始追踪</button>
+</div>
+<p class="status" id="status" role="status" aria-live="polite"></p>
+</main>
+<div class="bottom">
+<button class="primary" id="refresh" type="button">刷新海拔</button>
+<section class="panel" aria-label="环境数据">
+<div class="panel-row">
+<div class="stat">
+<span class="stat-label">气压</span>
+<span class="stat-value" id="pressure">--</span>
+</div>
+<div class="stat stat-right">
+<span class="stat-label">定位</span>
+<span class="stat-value">
+<i class="status-dot" aria-hidden="true"></i>
+<span id="statusText" role="status" aria-live="polite">未定位</span>
+</span>
+</div>
+</div>
+<div class="coords-row">
+<span class="coords" id="geo">—</span>
+</div>
+</section>
+</div>
+<noscript>
+<p style="position:fixed;inset:0;margin:0;display:grid;place-items:center;background:#0b1220;color:#f4f7fa;font-size:16px;">
+需要启用 JavaScript 才能使用海拔工具。
+</p>
+</noscript>
 <script>
 (function () {
-  'use strict';
-
-  var FT_PER_M = 3.28084;
-  var STORE_KEY = 'altitudeTool.v1';
-  var BUTTON_TEXT = '刷新海拔';
-  var COUNT_DURATION = 520;
-  var SEA_LEVEL_PRESSURE = 1013.25;
-
-  // Geolocation 错误码：1 权限拒绝 / 2 位置不可用 / 3 超时
-  var ERROR_MESSAGES = {
-    1: '定位权限被拒绝。请到浏览器或系统设置中允许访问位置，然后重试。',
-    2: '暂时无法获取位置信息，请检查网络或定位服务是否已开启。',
-    3: '定位超时了，请到室外开阔处再试一次。'
-  };
-
-  // 海拔配色区间（上限不含）
-  var ZONES = [
-    { limit: 500, name: 'sea', color: '#0f172a' },
-    { limit: 1500, name: 'forest', color: '#064e3b' },
-    { limit: 3000, name: 'rock', color: '#334155' },
-    { limit: Infinity, name: 'snow', color: '#e2e8f0' }
-  ];
-
-  var STATUS_TEXT = {
-    idle: '未定位',
-    loading: '定位中',
-    ok: '已连接',
-    warn: '已连接',
-    error: '定位失败'
-  };
-
-  var body = document.body;
-  var readoutEl = document.getElementById('readout');
-  var valueEl = document.getElementById('value');
-  var unitEl = document.getElementById('unit');
-  var statusEl = document.getElementById('status');
-  var statusTextEl = document.getElementById('statusText');
-  var pressureEl = document.getElementById('pressure');
-  var geoEl = document.getElementById('geo');
-  var trackLabelEl = document.getElementById('trackLabel');
-  var trackValueEl = document.getElementById('trackValue');
-  var trackBtn = document.getElementById('track');
-  var refreshBtn = document.getElementById('refresh');
-  var unitToggle = document.getElementById('unitToggle');
-  var themeMeta = document.querySelector('meta[name="theme-color"]');
-  var segBtns = Array.prototype.slice.call(unitToggle.querySelectorAll('.seg'));
-
-  var busy = false;
-
-  // 海拔与精度统一以米为单位存储，显示时再按单位换算
-  var state = {
-    unit: 'm',
-    status: 'idle',   // idle | loading | ok | warn | error
-    altitude: null,
-    accuracy: null,   // 依然读取，仅不再展示
-    lat: null,
-    lon: null
-  };
-
-  // 爬升追踪：start 为起点海拔（米），停止后清空
-  var track = {
-    active: false,
-    start: null
-  };
-
-  // 数字滚动动画：shown 记录当前屏幕上显示的数字（当前单位）
-  var counter = {
-    raf: null,
-    shown: null
-  };
-
-  /* ---------- 本地存储（仅记住单位偏好） ---------- */
-  function loadStore() {
-    try {
-      var raw = window.localStorage.getItem(STORE_KEY);
-      if (!raw) {
-        return;
-      }
-      var data = JSON.parse(raw);
-      if (data && (data.unit === 'ft' || data.unit === 'm')) {
-        state.unit = data.unit;
-      }
-    } catch (err) {
-      // 隐私模式下 localStorage 可能不可用，忽略即可
-    }
-  }
-
-  function saveStore() {
-    try {
-      window.localStorage.setItem(STORE_KEY, JSON.stringify({ unit: state.unit }));
-    } catch (err) {
-      // 写入失败时仅本次会话生效
-    }
-  }
-
-  /* ---------- 格式化 ---------- */
-  function convert(meters) {
-    return state.unit === 'ft' ? meters * FT_PER_M : meters;
-  }
-
-  function unitSymbol() {
-    return state.unit === 'ft' ? 'ft' : 'm';
-  }
-
-  function formatAltitude(meters) {
-    if (meters === null || typeof meters !== 'number' || isNaN(meters)) {
-      return '--';
-    }
-    return convert(meters).toFixed(1);
-  }
-
-  function formatCoords(lat, lon) {
-    if (lat === null || lon === null) {
-      return '—';
-    }
-    var ns = lat >= 0 ? 'N' : 'S';
-    var ew = lon >= 0 ? 'E' : 'W';
-    return Math.abs(lat).toFixed(4) + '° ' + ns + ', ' + Math.abs(lon).toFixed(4) + '° ' + ew;
-  }
-
-  // 国际标准大气（ISA）公式：p = p0 * (1 - 2.25577e-5 * h) ^ 5.25588
-  function pressureAt(meters) {
-    var factor = 1 - 2.25577e-5 * meters;
-    if (!(factor > 0)) {
-      return null;
-    }
-    return SEA_LEVEL_PRESSURE * Math.pow(factor, 5.25588);
-  }
-
-  /* ---------- 背景配色 ---------- */
-  function zoneFor(meters) {
-    for (var i = 0; i < ZONES.length; i++) {
-      if (meters < ZONES[i].limit) {
-        return ZONES[i];
-      }
-    }
-    return ZONES[ZONES.length - 1];
-  }
-
-  function applyZone(zone) {
-    var name = zone ? zone.name : '';
-    if ((body.dataset.zone || '') === name) {
-      return;
-    }
-    if (name) {
-      body.dataset.zone = name;
-    } else {
-      delete body.dataset.zone;
-    }
-    syncThemeMeta();
-  }
-
-  function systemPrefersLight() {
-    return !!(window.matchMedia &&
-      window.matchMedia('(prefers-color-scheme: light)').matches);
-  }
-
-  function syncThemeMeta() {
-    if (!themeMeta) {
-      return;
-    }
-    var color = '';
-    for (var i = 0; i < ZONES.length; i++) {
-      if (ZONES[i].name === body.dataset.zone) {
-        color = ZONES[i].color;
-        break;
-      }
-    }
-    if (!color) {
-      color = systemPrefersLight() ? '#eef2f7' : '#0b1220';
-    }
-    themeMeta.setAttribute('content', color);
-  }
-
-  /* ---------- 自适应字号：保证长数字不溢出 ---------- */
-  function fitValue() {
-    var avail = document.querySelector('main').clientWidth;
-    if (!avail) {
-      return;
-    }
-    // 先关过渡再撤掉内联字号，否则读到的是过渡中间值，字号会越缩越小
-    valueEl.classList.add('is-measuring');
-    readoutEl.style.removeProperty('--val-size');
-    var base = parseFloat(window.getComputedStyle(valueEl).fontSize);
-    var natural = valueEl.scrollWidth + unitEl.offsetWidth + 6;
-    valueEl.classList.remove('is-measuring');
-    if (natural > avail && natural > 0) {
-      base = Math.floor(base * avail / natural * 0.97);
-    }
-    readoutEl.style.setProperty('--val-size', Math.max(40, base) + 'px');
-  }
-
-  /* ---------- 数字滚动 ---------- */
-  function prefersReducedMotion() {
-    return !!(window.matchMedia &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  }
-
-  function stopCounter() {
-    if (counter.raf !== null) {
-      window.cancelAnimationFrame(counter.raf);
-      counter.raf = null;
-    }
-  }
-
-  function setNumber(num) {
-    valueEl.textContent = num.toFixed(1);
-    counter.shown = num;
-  }
-
-  function animateNumber(fromNum, toNum) {
-    stopCounter();
-
-    var from = (typeof fromNum === 'number' && isFinite(fromNum)) ? fromNum : 0;
-
-    if (prefersReducedMotion() || Math.abs(toNum - from) < 0.05) {
-      setNumber(toNum);
-      fitValue();
-      return;
-    }
-
-    // 先按两者中较长的字符串确定字号，避免滚动过程中字号抖动
-    var fromText = from.toFixed(1);
-    var toText = toNum.toFixed(1);
-    valueEl.textContent = fromText.length >= toText.length ? fromText : toText;
-    fitValue();
-
-    // 定好字号后立即回到起始值，避免探针文本闪一帧
-    setNumber(from);
-
-    var span = toNum - from;
-    var startTime = null;
-
-    function frame(now) {
-      var time = typeof now === 'number' ? now : Date.now();
-      if (startTime === null) {
-        startTime = time;
-      }
-      var progress = Math.min(1, (time - startTime) / COUNT_DURATION);
-      var eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
-
-      setNumber(from + span * eased);
-
-      if (progress < 1) {
-        counter.raf = window.requestAnimationFrame(frame);
-      } else {
-        counter.raf = null;
-        setNumber(toNum);
-        fitValue();
-      }
-    }
-
-    counter.raf = window.requestAnimationFrame(frame);
-  }
-
-  /* ---------- 渲染 ---------- */
-  function renderValue(mode) {
-    var hasAltitude = state.status === 'ok' && state.altitude !== null;
-
-    if (!hasAltitude) {
-      stopCounter();
-      valueEl.textContent = '--';
-      unitEl.textContent = unitSymbol();
-      unitEl.classList.add('is-hidden');
-      if (state.status === 'error') {
-        counter.shown = null;
-      }
-      fitValue();
-      return;
-    }
-
-    var target = convert(state.altitude);
-    unitEl.textContent = unitSymbol();
-    unitEl.classList.remove('is-hidden');
-
-    if (mode === 'count' || mode === 'unit') {
-      animateNumber(counter.shown, target);
-    } else {
-      stopCounter();
-      setNumber(target);
-      fitValue();
-    }
-  }
-
-  function formatDelta() {
-    if (!track.active || track.start === null || state.altitude === null) {
-      return '';
-    }
-    var diff = convert(state.altitude - track.start);
-    if (Math.abs(diff) < 0.05) {
-      diff = 0;
-    }
-    return (diff > 0 ? '+' : '') + diff.toFixed(1) + ' ' + unitSymbol();
-  }
-
-  function renderTracking() {
-    var hasAltitude = state.status === 'ok' && state.altitude !== null;
-
-    trackBtn.textContent = track.active ? '停止追踪' : '开始追踪';
-    trackBtn.classList.toggle('is-active', track.active);
-    trackBtn.disabled = !track.active && !hasAltitude;
-
-    if (track.active) {
-      trackLabelEl.textContent = '较起点';
-      trackValueEl.textContent = formatDelta() || '—';
-    } else {
-      trackLabelEl.textContent = '尚未开始追踪';
-      trackValueEl.textContent = '';
-    }
-  }
-
-  function renderPanel() {
-    var hasAltitude = state.status === 'ok' && state.altitude !== null;
-    var pressure = hasAltitude ? pressureAt(state.altitude) : null;
-
-    pressureEl.textContent = pressure === null ? '--' : pressure.toFixed(1) + ' hPa';
-    statusTextEl.textContent = STATUS_TEXT[state.status] || STATUS_TEXT.idle;
-    geoEl.textContent = formatCoords(state.lat, state.lon);
-  }
-
-  function renderUnitToggle() {
-    unitToggle.dataset.active = state.unit;
-    segBtns.forEach(function (btn) {
-      var active = btn.dataset.unit === state.unit;
-      btn.classList.toggle('is-active', active);
-      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
-    });
-    unitEl.textContent = unitSymbol();
-  }
-
-  function renderAll(mode) {
-    renderUnitToggle();
-    renderValue(mode);
-    renderTracking();
-    renderPanel();
-  }
-
-  function setStatus(stateName) {
-    state.status = stateName;
-    body.dataset.state = stateName;
-  }
-
-  /* ---------- 业务 ---------- */
-  function toggleTracking() {
-    if (track.active) {
-      track.active = false;
-      track.start = null;
-      renderTracking();
-      return;
-    }
-
-    if (state.status !== 'ok' || state.altitude === null) {
-      return;
-    }
-
-    track.active = true;
-    track.start = state.altitude;
-    renderTracking();
-  }
-
-  function showError(message) {
-    busy = false;
-    refreshBtn.disabled = false;
-    refreshBtn.textContent = BUTTON_TEXT;
-    state.altitude = null;
-    state.accuracy = null;
-    state.lat = null;
-    state.lon = null;
-    setStatus('error');
-    applyZone(null);
-    statusEl.textContent = message;
-    renderAll(false);
-  }
-
-  function showSuccess(position) {
-    var coords = position.coords;
-    var accuracy = typeof coords.accuracy === 'number' && isFinite(coords.accuracy)
-      ? coords.accuracy
-      : null;
-    var altitude = typeof coords.altitude === 'number' && isFinite(coords.altitude)
-      ? coords.altitude
-      : null;
-
-    busy = false;
-    refreshBtn.disabled = false;
-    refreshBtn.textContent = BUTTON_TEXT;
-
-    state.accuracy = accuracy;
-    state.altitude = altitude;
-    state.lat = coords.latitude;
-    state.lon = coords.longitude;
-
-    if (altitude === null) {
-      // 部分设备（尤其是未开启 GPS 的机型）不会返回垂直方向数据
-      setStatus('warn');
-      applyZone(null);
-      statusEl.textContent = '已定位成功，但当前设备未能提供海拔数据，可在室外开阔处重试。';
-    } else {
-      setStatus('ok');
-      applyZone(zoneFor(altitude));
-      statusEl.textContent = '';
-    }
-
-    renderAll('count');
-  }
-
-  function locate() {
-    if (busy) {
-      return;
-    }
-
-    if (!('geolocation' in navigator)) {
-      showError('当前浏览器不支持定位功能，请更换浏览器后重试。');
-      return;
-    }
-
-    busy = true;
-    refreshBtn.disabled = true;
-    refreshBtn.textContent = '定位中…';
-    setStatus('loading');
-    statusEl.textContent = '';
-    state.lat = null;
-    state.lon = null;
-    renderAll(false);
-
-    navigator.geolocation.getCurrentPosition(
-      showSuccess,
-      function (error) {
-        showError(ERROR_MESSAGES[error.code] || '获取位置失败，请稍后重试。');
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 20000,
-        maximumAge: 0
-      }
-    );
-  }
-
-  function setUnit(unit) {
-    if (state.unit === unit) {
-      return;
-    }
-    state.unit = unit;
-    saveStore();
-    renderAll(state.status === 'ok' ? 'unit' : false);
-  }
-
-  /* ---------- 事件绑定 ---------- */
-  refreshBtn.addEventListener('click', locate);
-  trackBtn.addEventListener('click', toggleTracking);
-
-  segBtns.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      setUnit(btn.dataset.unit);
-    });
-  });
-
-  window.addEventListener('resize', function () {
-    fitValue();
-  });
-
-  window.addEventListener('orientationchange', function () {
-    window.setTimeout(fitValue, 120);
-  });
-
-  /* ---------- 初始化 ---------- */
-  loadStore();
-  renderAll(false);
-  syncThemeMeta();
-
-  if (window.matchMedia) {
-    var schemeQuery = window.matchMedia('(prefers-color-scheme: light)');
-    if (schemeQuery && typeof schemeQuery.addEventListener === 'function') {
-      schemeQuery.addEventListener('change', syncThemeMeta);
-    }
-  }
+'use strict';
+var FT_PER_M = 3.28084;
+var STORE_KEY = 'altitudeTool.v1';
+var BUTTON_TEXT = '刷新海拔';
+var COUNT_DURATION = 520;
+var SEA_LEVEL_PRESSURE = 1013.25;
+var ERROR_MESSAGES = {
+1: '定位权限被拒绝。请到浏览器或系统设置中允许访问位置，然后重试。',
+2: '暂时无法获取位置信息，请检查网络或定位服务是否已开启。',
+3: '定位超时了，请到室外开阔处再试一次。'
+};
+var ZONES = [
+{ limit: 500, name: 'sea', color: '#0f172a' },
+{ limit: 1500, name: 'forest', color: '#064e3b' },
+{ limit: 3000, name: 'rock', color: '#334155' },
+{ limit: Infinity, name: 'snow', color: '#e2e8f0' }
+];
+var STATUS_TEXT = {
+idle: '未定位',
+loading: '定位中',
+prompt: '待授权',
+ok: '已连接',
+warn: '已连接',
+error: '定位失败'
+};
+var body = document.body;
+var readoutEl = document.getElementById('readout');
+var valueEl = document.getElementById('value');
+var unitEl = document.getElementById('unit');
+var statusEl = document.getElementById('status');
+var statusTextEl = document.getElementById('statusText');
+var pressureEl = document.getElementById('pressure');
+var geoEl = document.getElementById('geo');
+var trackLabelEl = document.getElementById('trackLabel');
+var trackValueEl = document.getElementById('trackValue');
+var trackBtn = document.getElementById('track');
+var refreshBtn = document.getElementById('refresh');
+var unitToggle = document.getElementById('unitToggle');
+var themeMeta = document.querySelector('meta[name="theme-color"]');
+var segBtns = Array.prototype.slice.call(unitToggle.querySelectorAll('.seg'));
+var busy = false;
+var state = {
+unit: 'm',
+status: 'idle',   // idle | loading | prompt | ok | warn | error
+altitude: null,
+accuracy: null,   // 依然读取，仅不再展示
+lat: null,
+lon: null
+};
+var track = {
+active: false,
+start: null
+};
+var counter = {
+raf: null,
+shown: null
+};
+function loadStore() {
+try {
+var raw = window.localStorage.getItem(STORE_KEY);
+if (!raw) {
+return;
+}
+var data = JSON.parse(raw);
+if (data && (data.unit === 'ft' || data.unit === 'm')) {
+state.unit = data.unit;
+}
+} catch (err) {
+}
+}
+function saveStore() {
+try {
+window.localStorage.setItem(STORE_KEY, JSON.stringify({ unit: state.unit }));
+} catch (err) {
+}
+}
+function convert(meters) {
+return state.unit === 'ft' ? meters * FT_PER_M : meters;
+}
+function unitSymbol() {
+return state.unit === 'ft' ? 'ft' : 'm';
+}
+function formatCoords(lat, lon) {
+if (lat === null || lon === null) {
+return '—';
+}
+var ns = lat >= 0 ? 'N' : 'S';
+var ew = lon >= 0 ? 'E' : 'W';
+return Math.abs(lat).toFixed(4) + '° ' + ns + ', ' + Math.abs(lon).toFixed(4) + '° ' + ew;
+}
+function pressureAt(meters) {
+var factor = 1 - 2.25577e-5 * meters;
+if (!(factor > 0)) {
+return null;
+}
+return SEA_LEVEL_PRESSURE * Math.pow(factor, 5.25588);
+}
+function zoneFor(meters) {
+for (var i = 0; i < ZONES.length; i++) {
+if (meters < ZONES[i].limit) {
+return ZONES[i];
+}
+}
+return ZONES[ZONES.length - 1];
+}
+function applyZone(zone) {
+var name = zone ? zone.name : '';
+if ((body.dataset.zone || '') === name) {
+return;
+}
+if (name) {
+body.dataset.zone = name;
+} else {
+delete body.dataset.zone;
+}
+syncThemeMeta();
+}
+function systemPrefersLight() {
+return !!(window.matchMedia &&
+window.matchMedia('(prefers-color-scheme: light)').matches);
+}
+function syncThemeMeta() {
+if (!themeMeta) {
+return;
+}
+var color = '';
+for (var i = 0; i < ZONES.length; i++) {
+if (ZONES[i].name === body.dataset.zone) {
+color = ZONES[i].color;
+break;
+}
+}
+if (!color) {
+color = systemPrefersLight() ? '#eef2f7' : '#0b1220';
+}
+themeMeta.setAttribute('content', color);
+}
+function fitValue() {
+var avail = document.querySelector('main').clientWidth;
+if (!avail) {
+return;
+}
+valueEl.classList.add('is-measuring');
+readoutEl.style.removeProperty('--val-size');
+var base = parseFloat(window.getComputedStyle(valueEl).fontSize);
+var natural = valueEl.scrollWidth + unitEl.offsetWidth + 6;
+valueEl.classList.remove('is-measuring');
+if (natural > avail && natural > 0) {
+base = Math.floor(base * avail / natural * 0.97);
+}
+readoutEl.style.setProperty('--val-size', Math.max(40, base) + 'px');
+}
+function prefersReducedMotion() {
+return !!(window.matchMedia &&
+window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+}
+function stopCounter() {
+if (counter.raf !== null) {
+window.cancelAnimationFrame(counter.raf);
+counter.raf = null;
+}
+}
+function setNumber(num) {
+valueEl.textContent = num.toFixed(1);
+counter.shown = num;
+}
+function animateNumber(fromNum, toNum) {
+stopCounter();
+var from = (typeof fromNum === 'number' && isFinite(fromNum)) ? fromNum : 0;
+if (prefersReducedMotion() || Math.abs(toNum - from) < 0.05) {
+setNumber(toNum);
+fitValue();
+return;
+}
+var fromText = from.toFixed(1);
+var toText = toNum.toFixed(1);
+valueEl.textContent = fromText.length >= toText.length ? fromText : toText;
+fitValue();
+setNumber(from);
+var span = toNum - from;
+var startTime = null;
+function frame(now) {
+var time = typeof now === 'number' ? now : Date.now();
+if (startTime === null) {
+startTime = time;
+}
+var progress = Math.min(1, (time - startTime) / COUNT_DURATION);
+var eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+setNumber(from + span * eased);
+if (progress < 1) {
+counter.raf = window.requestAnimationFrame(frame);
+} else {
+counter.raf = null;
+setNumber(toNum);
+fitValue();
+}
+}
+counter.raf = window.requestAnimationFrame(frame);
+}
+function renderValue(mode) {
+var hasAltitude = state.status === 'ok' && state.altitude !== null;
+if (!hasAltitude) {
+stopCounter();
+valueEl.textContent = '--';
+unitEl.textContent = unitSymbol();
+unitEl.classList.add('is-hidden');
+if (state.status === 'error') {
+counter.shown = null;
+}
+fitValue();
+return;
+}
+var target = convert(state.altitude);
+unitEl.textContent = unitSymbol();
+unitEl.classList.remove('is-hidden');
+if (mode === 'count' || mode === 'unit') {
+animateNumber(counter.shown, target);
+} else {
+stopCounter();
+setNumber(target);
+fitValue();
+}
+}
+function formatDelta() {
+if (!track.active || track.start === null || state.altitude === null) {
+return '';
+}
+var diff = convert(state.altitude - track.start);
+if (Math.abs(diff) < 0.05) {
+diff = 0;
+}
+return (diff > 0 ? '+' : '') + diff.toFixed(1) + ' ' + unitSymbol();
+}
+function renderTracking() {
+var hasAltitude = state.status === 'ok' && state.altitude !== null;
+trackBtn.textContent = track.active ? '停止追踪' : '开始追踪';
+trackBtn.classList.toggle('is-active', track.active);
+trackBtn.disabled = !track.active && !hasAltitude;
+if (track.active) {
+trackLabelEl.textContent = '较起点';
+trackValueEl.textContent = formatDelta() || '—';
+} else {
+trackLabelEl.textContent = '尚未开始追踪';
+trackValueEl.textContent = '';
+}
+}
+function renderPanel() {
+var hasAltitude = state.status === 'ok' && state.altitude !== null;
+var pressure = hasAltitude ? pressureAt(state.altitude) : null;
+pressureEl.textContent = pressure === null ? '--' : pressure.toFixed(1) + ' hPa';
+statusTextEl.textContent = STATUS_TEXT[state.status] || STATUS_TEXT.idle;
+geoEl.textContent = formatCoords(state.lat, state.lon);
+}
+function renderUnitToggle() {
+unitToggle.dataset.active = state.unit;
+segBtns.forEach(function (btn) {
+var active = btn.dataset.unit === state.unit;
+btn.classList.toggle('is-active', active);
+btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+});
+unitEl.textContent = unitSymbol();
+}
+function renderAll(mode) {
+renderUnitToggle();
+renderValue(mode);
+renderTracking();
+renderPanel();
+}
+function setStatus(stateName) {
+state.status = stateName;
+body.dataset.state = stateName;
+}
+function toggleTracking() {
+if (track.active) {
+track.active = false;
+track.start = null;
+renderTracking();
+return;
+}
+if (state.status !== 'ok' || state.altitude === null) {
+return;
+}
+track.active = true;
+track.start = state.altitude;
+renderTracking();
+}
+function showError(message) {
+busy = false;
+refreshBtn.disabled = false;
+refreshBtn.textContent = BUTTON_TEXT;
+state.altitude = null;
+state.accuracy = null;
+state.lat = null;
+state.lon = null;
+setStatus('error');
+applyZone(null);
+statusEl.textContent = message;
+renderAll(false);
+}
+function showPermissionHint() {
+busy = false;
+refreshBtn.disabled = false;
+refreshBtn.textContent = BUTTON_TEXT;
+state.altitude = null;
+state.accuracy = null;
+state.lat = null;
+state.lon = null;
+setStatus('prompt');
+applyZone(null);
+statusEl.textContent = '请点击下方「刷新海拔」按钮，允许获取位置后即可显示海拔。';
+renderAll(false);
+}
+function showSuccess(position) {
+var coords = position.coords;
+var accuracy = typeof coords.accuracy === 'number' && isFinite(coords.accuracy)
+? coords.accuracy
+: null;
+var altitude = typeof coords.altitude === 'number' && isFinite(coords.altitude)
+? coords.altitude
+: null;
+busy = false;
+refreshBtn.disabled = false;
+refreshBtn.textContent = BUTTON_TEXT;
+state.accuracy = accuracy;
+state.altitude = altitude;
+state.lat = coords.latitude;
+state.lon = coords.longitude;
+if (altitude === null) {
+setStatus('warn');
+applyZone(null);
+statusEl.textContent = '已定位成功，但当前设备未能提供海拔数据，可在室外开阔处重试。';
+} else {
+setStatus('ok');
+applyZone(zoneFor(altitude));
+statusEl.textContent = '';
+}
+renderAll('count');
+}
+function locate(fromUser) {
+if (busy) {
+return;
+}
+if (!('geolocation' in navigator)) {
+showError('当前浏览器不支持定位功能，请更换浏览器后重试。');
+return;
+}
+busy = true;
+refreshBtn.disabled = true;
+refreshBtn.textContent = '定位中…';
+setStatus('loading');
+statusEl.textContent = '正在获取海拔…';
+state.lat = null;
+state.lon = null;
+renderAll(false);
+navigator.geolocation.getCurrentPosition(
+showSuccess,
+function (error) {
+if (!fromUser && error.code === 1) {
+showPermissionHint();
+} else {
+showError(ERROR_MESSAGES[error.code] || '获取位置失败，请稍后重试。');
+}
+},
+{
+enableHighAccuracy: true,
+timeout: 20000,
+maximumAge: 0
+}
+);
+}
+function setUnit(unit) {
+if (state.unit === unit) {
+return;
+}
+state.unit = unit;
+saveStore();
+renderAll(state.status === 'ok' ? 'unit' : false);
+}
+refreshBtn.addEventListener('click', function () {
+locate(true);
+});
+trackBtn.addEventListener('click', toggleTracking);
+segBtns.forEach(function (btn) {
+btn.addEventListener('click', function () {
+setUnit(btn.dataset.unit);
+});
+});
+window.addEventListener('resize', function () {
+fitValue();
+});
+window.addEventListener('orientationchange', function () {
+window.requestAnimationFrame(fitValue);
+window.setTimeout(fitValue, 120);
+window.setTimeout(fitValue, 280);
+});
+if (window.visualViewport && typeof window.visualViewport.addEventListener === 'function') {
+var viewportTimer = null;
+window.visualViewport.addEventListener('resize', function () {
+if (viewportTimer !== null) {
+window.clearTimeout(viewportTimer);
+}
+viewportTimer = window.setTimeout(function () {
+viewportTimer = null;
+fitValue();
+}, 80);
+});
+}
+loadStore();
+renderAll(false);
+syncThemeMeta();
+if (window.matchMedia) {
+var schemeQuery = window.matchMedia('(prefers-color-scheme: light)');
+if (schemeQuery && typeof schemeQuery.addEventListener === 'function') {
+schemeQuery.addEventListener('change', syncThemeMeta);
+}
+}
+if ('serviceWorker' in navigator) {
+window.addEventListener('load', function () {
+navigator.serviceWorker.register('sw.js').catch(function () {});
+});
+}
+// 首次加载自动尝试定位；iOS 未授权时回退到手动点击
+window.setTimeout(function () {
+locate(false);
+}, 150);
 })();
 </script>
 </body>
